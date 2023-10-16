@@ -13,7 +13,7 @@ public class CronUpdater {
 
     private final ButtonWebSocketHandler controller;
 
-    @Scheduled(fixedRate = 1000)
+    //@Scheduled(fixedRate = 1000)
     public void reportCurrentTime() throws Exception {
         log.info("Updating info on clients");
         controller.doThing();
