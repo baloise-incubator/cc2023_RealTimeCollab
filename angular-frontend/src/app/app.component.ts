@@ -25,7 +25,7 @@ export class AppComponent implements OnInit, OnDestroy {
   openWebSocketConnection() {
     this.client.onConnect = () => {
       this.client?.subscribe("/topic/stocks", (payload) => {
-        this.updateStocks(JSON.parse(JSON.parse(payload.body).payload));
+        this.updateStocks(JSON.parse(payload.body));
       });
     };
 
@@ -48,7 +48,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   updateStocks(stock: any) {
-    this.stock = stock
+    this.stock = stock;
   }
 
   onBuyStock() {
