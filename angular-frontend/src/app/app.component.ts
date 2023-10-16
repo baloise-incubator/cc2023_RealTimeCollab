@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Client, Message } from '@stomp/stompjs';
+import { Client } from '@stomp/stompjs';
 
 @Component({
   selector: 'app-root',
@@ -24,10 +24,10 @@ export class AppComponent implements OnInit, OnDestroy {
 
   openWebSocketConnection() {
     this.client = new Client({ brokerURL: "ws://localhost:8080/connect", debug: (msg) => console.log(msg) });
-    this.client.onConnect = (frame) => {
-      this.client?.subscribe("/topic/stocks", (message) => {
-        console.log("Got something" + message.body);
-        this.updateStocks(JSON.parse(message.body).payload);
+    this.client.onConnect = () => {
+      this.client?.subscribe("/topic/stocks", (payload) => {
+        console.log("Got something")
+        this.updateStocks(JSON.parse(JSON.parse(payload.body).payload));
       });
     };
 

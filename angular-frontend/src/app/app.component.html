@@ -9,7 +9,7 @@
     <!-- Your application content -->
     <bal-heading space="all">Hello Websockets!</bal-heading>
     <bal-card>
-      <bal-badge [color]="stock.increased ? 'danger' : 'success'" position="card">{{stock.increased ? "▲" : "▼"}}</bal-badge>
+      <bal-badge [color]="stock.increased ? 'success' : 'danger'" position="card">{{stock.increased ? "▲" : "▼"}}</bal-badge>
       <bal-card-content>
         <div class="is-flex is-justify-content-center is-align-items-center">
           <img style="max-width: 88px" [src]="stock.icon" alt="Stock Logo" />
