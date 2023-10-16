@@ -8,7 +8,7 @@
   <main class="container">
     <!-- Your application content -->
     <bal-heading space="all">Hello Websockets!</bal-heading>
-    <bal-card *ngIf="stock.name">
+    <bal-card>
       <bal-badge [color]="stock.increased ? 'danger' : 'success'" position="card">{{stock.increased ? "▲" : "▼"}}</bal-badge>
       <bal-card-content>
         <div class="is-flex is-justify-content-center is-align-items-center">
