@@ -13,9 +13,11 @@ import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry
 public class WebSocketConfig implements WebSocketConfigurer {
 
     private final StockWebSocketHandler stockHandler;
+    private final ButtonWebSocketHandler buttonHandler;
 
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
         registry.addHandler(stockHandler, "/stocks").setAllowedOrigins("*");
+        registry.addHandler(buttonHandler, "/button").setAllowedOrigins("*");
     }
 }
