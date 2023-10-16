@@ -3,25 +3,40 @@ package com.baloise.collab.springbackend;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
-import org.springframework.stereotype.Service;
-import org.springframework.web.socket.TextMessage;
-import org.springframework.web.socket.WebSocketSession;
-import org.springframework.web.socket.handler.TextWebSocketHandler;
+import org.springframework.messaging.Message;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.support.MessageBuilder;
+import org.springframework.stereotype.Controller;
+
 
 @RequiredArgsConstructor
-@Service
 @Log
-public class ButtonWebSocketHandler extends TextWebSocketHandler {
+@Controller
+public class ButtonWebSocketHandler {
 
     private final ObjectMapper objectMapper;
     private final SuperRepository superRepository;
+    private final String iconLocation = "https://cdn.cdnlogo.com/logos/a/77/amazon-dark.svg";
 
-    @Override
-    public void handleTextMessage(WebSocketSession session, TextMessage textMessage) throws Exception {
-        log.info(textMessage.toString());
-        var dto =  objectMapper.readValue(textMessage.getPayload(), ButtonMessageDTO.class);
+    @MessageMapping("/button")
+    @SendTo("/stocks")
+    public Message<String> handleTextMessage(Message<String> message) throws Exception {
+        log.info(message.getPayload().toString());
+        var dto =  objectMapper.readValue(message.getPayload().toString(), ButtonMessageDTO.class);
         var entity = new ButtonMessageEntity();
         entity.setUserName(dto.user);
         superRepository.save(entity);
+        return updateStockPrice();
+    }
+
+    public Message<String> updateStockPrice() throws Exception {
+        var oldPrice = 0.0f;
+        var stockPrice = 0.0f;
+        oldPrice = stockPrice;
+        stockPrice = superRepository.count();
+        var stock = new Stock("SuperStock", iconLocation, stockPrice, stockPrice > oldPrice);
+
+        return MessageBuilder.withPayload(objectMapper.writeValueAsString(stock)).build();
     }
 }
