@@ -19,7 +19,7 @@ public class ButtonWebSocketHandler {
     private final String iconLocation = "https://cdn.cdnlogo.com/logos/a/77/amazon-dark.svg";
 
     @MessageMapping("/button")
-    @SendTo("/stocks")
+    @SendTo("/topic/stocks")
     public Message<String> handleTextMessage(Message<String> message) throws Exception {
         log.info(message.getPayload().toString());
         var dto =  objectMapper.readValue(message.getPayload().toString(), ButtonMessageDTO.class);
@@ -29,7 +29,7 @@ public class ButtonWebSocketHandler {
         return updateStockPrice();
     }
 
-    @SendTo("/stocks")
+    @SendTo("/topic/stocks")
     public Message<String> doThing() throws Exception {
         return updateStockPrice();
     }
