@@ -8,11 +8,11 @@ import { Client } from '@stomp/stompjs';
 })
 export class AppComponent implements OnInit, OnDestroy {
   stock: any = {}
+  client: Client;
 
-  webSocket?: WebSocket;
-  client?: Client;
-
-  constructor() { }
+  constructor() {
+    this.client = new Client({ brokerURL: "ws://localhost:8080/connect" });
+  }
 
   ngOnInit() {
     this.openWebSocketConnection();
@@ -23,10 +23,8 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   openWebSocketConnection() {
-    this.client = new Client({ brokerURL: "ws://localhost:8080/connect", debug: (msg) => console.log(msg) });
     this.client.onConnect = () => {
       this.client?.subscribe("/topic/stocks", (payload) => {
-        console.log("Got something")
         this.updateStocks(JSON.parse(JSON.parse(payload.body).payload));
       });
     };
