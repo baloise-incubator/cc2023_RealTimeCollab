@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.baloise</groupId>
-    <artifactId>realtime-collab</artifactId>
+    <artifactId>realtime-collab-backend</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>realtime-collab</name>
-    <description>realtime-collab</description>
+    <name>realtime-collab-backend</name>
+    <description>realtime-collab-backend</description>
     <properties>
         <java.version>21</java.version>
     </properties>

@@ -1,8 +1,8 @@
-HELP.md
+spring-backend/src/HELP.md
 target/
 !.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**/target/
-!**/src/test/**/target/
+!spring-backend/src/main/**/target/
+!spring-backend/src/test/**/target/
 
 ### STS ###
 .apt_generated
@@ -26,8 +26,8 @@ target/
 /nbdist/
 /.nb-gradle/
 build/
-!**/src/main/**/build/
-!**/src/test/**/build/
+!spring-backend/src/main/**/build/
+!spring-backend/src/test/**/build/
 
 ### VS Code ###
 .vscode/
