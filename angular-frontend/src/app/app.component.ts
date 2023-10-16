@@ -1,6 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { HttpService } from 'src/http.service';
-import * as Stomp from 'stompjs';
+import { Client, Message } from '@stomp/stompjs';
 
 @Component({
   selector: 'app-root',
@@ -8,10 +7,10 @@ import * as Stomp from 'stompjs';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit, OnDestroy {
-  stock : any = {}
+  stock: any = {}
 
   webSocket?: WebSocket;
-  client?: Stomp.Client;
+  client?: Client;
 
   constructor() { }
 
@@ -24,19 +23,29 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   openWebSocketConnection() {
-    this.webSocket = new HttpService().getWebSocket();
-    this.client = Stomp.over(this.webSocket);
-    this.client.connect({}, () => {
-      this.client?.subscribe("/websocket/stocks", (payload) => {
+    this.client = new Client({ brokerURL: "ws://localhost:8080/connect", debug: (msg) => console.log(msg) });
+    this.client.onConnect = (frame) => {
+      this.client?.subscribe("/topic/stocks", (payload) => {
+        console.log("Got something")
         this.updateStocks(JSON.parse(payload.body));
       });
-    });
+    };
+
+    this.client.onWebSocketError = (error) => {
+      console.error('Error with websocket', error);
+    };
+
+    this.client.onStompError = (frame) => {
+      console.error('Broker reported error: ' + frame.headers['message']);
+      console.error('Additional details: ' + frame.body);
+    };
+    this.client.activate();
   }
 
   closeWebSocketConnection() {
-    if (this.client && this.webSocket) {
-      this.webSocket.close();
-      this.client.unsubscribe("/websocket/stocks");
+    if (this.client) {
+      this.client.unsubscribe("/topic/stocks");
+      this.client.deactivate();
     }
   }
 
@@ -45,7 +54,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   onBuyStock() {
-    var payload= { user: "John Doe" }
-    this.client?.send("/websockets/button", {}, JSON.stringify(payload));
+    var payload = { user: "John Doe" }
+    this.client?.publish({ destination: "/app/button", body: JSON.stringify(payload) });
   }
 }
