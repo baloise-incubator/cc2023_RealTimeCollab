@@ -19,7 +19,7 @@ public class ButtonWebSocketHandler extends TextWebSocketHandler {
     @Override
     public void handleTextMessage(WebSocketSession session, TextMessage textMessage) throws Exception {
         log.info(textMessage.toString());
-        var dto =  objectMapper.readValue(textMessage.toString(), ButtonMessageDTO.class);
+        var dto =  objectMapper.readValue(textMessage.getPayload(), ButtonMessageDTO.class);
         var entity = new ButtonMessageEntity();
         entity.setUserName(dto.user);
         superRepository.save(entity);

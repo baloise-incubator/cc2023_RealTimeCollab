@@ -28,7 +28,7 @@ public class StockWebSocketHandler extends TextWebSocketHandler {
         var stockPrice = 0.0f;
         while(true){
             oldPrice = stockPrice;
-            stockPrice = Stream.of(superRepository.findAll().spliterator()).count();
+            stockPrice = superRepository.count();
             var stock = new Stock("SuperStock", iconLocation, stockPrice, stockPrice > oldPrice);
 
             var message = new TextMessage(objectMapper.writeValueAsString(stock));

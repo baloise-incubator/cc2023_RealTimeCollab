@@ -1,8 +1,6 @@
 package com.baloise.collab.springbackend;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,13 +9,11 @@ import lombok.Setter;
 @Table(name="button")
 public class ButtonMessageEntity {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
     @Setter
     private String userName;
-    @Id
-    private Long id;
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
 }
