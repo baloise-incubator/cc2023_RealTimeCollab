@@ -8,11 +8,16 @@ import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
+import java.util.List;
 import java.util.Random;
+import java.util.stream.Stream;
+
 @RequiredArgsConstructor
 @Service
 @Log
 public class StockWebSocketHandler extends TextWebSocketHandler {
+
+    private final SuperRepository superRepository;
 
     private final String iconLocation = "https://cdn.cdnlogo.com/logos/a/77/amazon-dark.svg";
     private final ObjectMapper objectMapper;
@@ -23,7 +28,7 @@ public class StockWebSocketHandler extends TextWebSocketHandler {
         var stockPrice = 0.0f;
         while(true){
             oldPrice = stockPrice;
-            stockPrice = 12 + new Random().nextFloat();
+            stockPrice = Stream.of(superRepository.findAll().spliterator()).count();
             var stock = new Stock("SuperStock", iconLocation, stockPrice, stockPrice > oldPrice);
 
             var message = new TextMessage(objectMapper.writeValueAsString(stock));
