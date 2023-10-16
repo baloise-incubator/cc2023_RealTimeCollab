@@ -27,7 +27,7 @@ export class AppComponent implements OnInit, OnDestroy {
     this.webSocket = new HttpService().getWebSocket();
     this.client = Stomp.over(this.webSocket);
     this.client.connect({}, () => {
-      this.client?.subscribe("/stocks", (payload) => {
+      this.client?.subscribe("/websocket/stocks", (payload) => {
         this.updateStocks(JSON.parse(payload.body));
       });
     });
@@ -36,7 +36,7 @@ export class AppComponent implements OnInit, OnDestroy {
   closeWebSocketConnection() {
     if (this.client && this.webSocket) {
       this.webSocket.close();
-      this.client.unsubscribe("/item-updates");
+      this.client.unsubscribe("/websocket/stocks");
     }
   }
 
@@ -46,6 +46,6 @@ export class AppComponent implements OnInit, OnDestroy {
 
   onBuyStock() {
     var payload= { user: "John Doe" }
-    this.client?.send("/button", {}, JSON.stringify(payload));
+    this.client?.send("/websockets/button", {}, JSON.stringify(payload));
   }
 }
