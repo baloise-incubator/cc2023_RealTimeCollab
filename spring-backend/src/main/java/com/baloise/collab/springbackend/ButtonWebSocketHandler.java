@@ -29,6 +29,11 @@ public class ButtonWebSocketHandler {
         return updateStockPrice();
     }
 
+    @SendTo("/stocks")
+    public Message<String> doThing() throws Exception {
+        return updateStockPrice();
+    }
+
     public Message<String> updateStockPrice() throws Exception {
         var oldPrice = 0.0f;
         var stockPrice = 0.0f;
