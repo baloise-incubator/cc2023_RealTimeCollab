@@ -25,9 +25,9 @@ export class AppComponent implements OnInit, OnDestroy {
   openWebSocketConnection() {
     this.client = new Client({ brokerURL: "ws://localhost:8080/connect", debug: (msg) => console.log(msg) });
     this.client.onConnect = (frame) => {
-      this.client?.subscribe("/topic/stocks", (payload) => {
-        console.log("Got something")
-        this.updateStocks(JSON.parse(payload.body));
+      this.client?.subscribe("/topic/stocks", (message) => {
+        console.log("Got something" + message.body);
+        this.updateStocks(JSON.parse(message.body).payload);
       });
     };
 
