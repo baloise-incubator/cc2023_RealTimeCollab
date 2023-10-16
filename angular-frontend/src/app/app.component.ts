@@ -6,14 +6,23 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  stock : any = {}
+  stock : any = {
+  }
 
-  private webSocket: WebSocket;
+  private stockSocket: WebSocket
+  private buttonSocket: WebSocket
 
   constructor() {
-    this.webSocket = new WebSocket('ws://localhost:8080/stocks');
-    this.webSocket.onmessage = (event) => {
+    this.stockSocket = new WebSocket("ws://localhost:8080/stocks")
+    this.buttonSocket = new WebSocket("ws://localhost:8080/button")
+    this.stockSocket.onmessage = (event) => {
       this.stock = JSON.parse(event.data)
-    };
-  } 
+    }
+  }
+
+  onBuyStock() {
+    var payload= { user: "John Doe" }
+
+    this.buttonSocket.send(JSON.stringify(payload));
+  }
 }

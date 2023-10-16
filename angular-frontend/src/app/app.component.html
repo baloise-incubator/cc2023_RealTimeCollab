@@ -9,21 +9,22 @@
     <!-- Your application content -->
     <bal-heading space="all">Hello Websockets!</bal-heading>
     <bal-card *ngIf="stock.name">
+      <bal-badge [color]="stock.increased ? 'danger' : 'success'" position="card">{{stock.increased ? "▲" : "▼"}}</bal-badge>
       <bal-card-content>
         <div class="is-flex is-justify-content-center is-align-items-center">
           <img style="max-width: 88px" [src]="stock.icon" alt="Stock Logo" />
           <div class="is-flex-grow-1 px-x-small">
             <bal-heading title level="h4" space="none">
-              {{ stock.name }} 
-              <span [ngClass]="{'has-text-success': stock.increased, 'has-text-danger': !stock.increased}">
-                {{ stock.increased ? "▲" : "▼" }}
-              </span>
+              {{ stock.name }}
             </bal-heading>
             <p>
               Is trading a the price of CHF {{ stock.price }}
             </p>
           </div>
-          <div><small>now</small></div>
+          <bal-button-group>
+            <bal-button color="success" square icon="plus" (click)="onBuyStock()"></bal-button>
+          </bal-button-group>
+          <div class="mx-small"><bal-tag>now</bal-tag></div>
         </div>
       </bal-card-content>
     </bal-card>
