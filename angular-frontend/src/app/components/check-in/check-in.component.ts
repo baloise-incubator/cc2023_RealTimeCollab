@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { FormControl, FormGroup} from "@angular/forms";
 import { BalValidators } from "@baloise/web-app-validators-angular";
-import {CheckInForm} from "../../../model";
+import {CheckInForm, Credentials} from "../../../model";
 
 @Component({
   selector: 'app-check-in',
@@ -10,14 +10,17 @@ import {CheckInForm} from "../../../model";
 })
 export class CheckInComponent {
 
+  @Output()
+  onCheckin = new EventEmitter<Credentials>()
+
     form = new FormGroup({
         username: new FormControl("", BalValidators.isRequired()),
         passcode: new FormControl("", BalValidators.isRequired())
     });
 
     onCheckIn() {
-        const payload = this.form.value as CheckInForm;
+        const payload = this.form.value as Credentials;
         console.log(payload)
-        //todo: send over to backend
+        this.onCheckin.emit(payload)
     }
 }

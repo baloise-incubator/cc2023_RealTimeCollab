@@ -12,3 +12,8 @@ export interface Stock {
 export interface Button {
     user: string
 }
+
+export interface Credentials {
+    username: string
+    passcode: string
+}

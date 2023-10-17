@@ -1,29 +1,33 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Client } from '@stomp/stompjs';
-import {Button, Stock} from "../model";
+import {Button, Credentials, Stock} from "../model";
+import { HttpService } from 'src/http.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit, OnDestroy {
-  stock?: Stock
+export class AppComponent implements OnDestroy {
+  stock?: Stock;
   client: Client;
+  httpService: HttpService;
 
   constructor() {
-    this.client = new Client({ brokerURL: "ws://localhost:8080/connect" });
-  }
-
-  ngOnInit() {
-    this.openWebSocketConnection();
+    this.httpService = new HttpService();
+    this.client = new Client();
   }
 
   ngOnDestroy(): void {
     this.closeWebSocketConnection();
   }
 
-  openWebSocketConnection() {
+  openWebSocketConnection(credentials : Credentials) {
+    this.client.configure({
+      debug: (msg) => console.log(msg),
+      webSocketFactory: () => this.httpService.getWebSocket(credentials)
+     })
+
     this.client.onConnect = () => {
       this.client?.subscribe("/topic/stocks", (payload) => {
         this.updateStocks(JSON.parse(payload.body) as Stock);
@@ -46,6 +50,11 @@ export class AppComponent implements OnInit, OnDestroy {
       this.client.unsubscribe("/topic/stocks");
       this.client.deactivate();
     }
+  }
+
+  onConnectToBackend(credentials: Credentials) {
+    console.log(credentials);
+    this.openWebSocketConnection(credentials)
   }
 
   updateStocks(stock: Stock) {
