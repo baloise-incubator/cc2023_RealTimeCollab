@@ -3,6 +3,7 @@ package com.baloise.collab.springbackend.useradmin;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
+import org.springframework.messaging.simp.annotation.SubscribeMapping;
 import org.springframework.stereotype.Component;
 import java.util.HashSet;
 import java.util.Objects;
@@ -13,8 +14,6 @@ import java.util.Set;
 @RequiredArgsConstructor
 @Log
 public class ActiveUserAdministration {
-
-    private final ActiveUsersWebSocketHandler userWebSocketHandler;
 
     @Getter
     private final Set<UserDTO> activeUsers = new HashSet<>();
@@ -34,7 +33,6 @@ public class ActiveUserAdministration {
             var userDTO = new UserDTO(name, colors[random.nextInt(0, 4)]);
             activeUsers.add(userDTO);
             log.info(userDTO.name() + " added to active Users");
-            userWebSocketHandler.updateActiveUsers(activeUsers);
         }
     }
 
@@ -45,7 +43,6 @@ public class ActiveUserAdministration {
         if(userToRemove.isPresent()) {
             activeUsers.remove(userToRemove.get());
             log.info(name + " removed from active Users");
-            userWebSocketHandler.updateActiveUsers(activeUsers);
         }
     }
 

@@ -31,7 +31,7 @@ export class AppComponent implements OnDestroy {
 
     this.client.onConnect = () => {
       this.client.subscribe("/topic/stocks", (payload) => this.updateStocks(JSON.parse(payload.body) as Stock));
-      this.client.subscribe("/topic/activeUsers", (payload) => this.users = JSON.parse(payload.body));
+      this.client.subscribe("/app/activeUsers", (payload) => this.users = JSON.parse(payload.body));
     };
 
     this.client.onWebSocketError = (error) => {

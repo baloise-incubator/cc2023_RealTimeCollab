@@ -1,6 +1,7 @@
 package com.baloise.collab.springbackend.eventlisteners;
 
 import com.baloise.collab.springbackend.useradmin.ActiveUserAdministration;
+import com.baloise.collab.springbackend.useradmin.ActiveUsersWebSocketHandler;
 import com.baloise.collab.springbackend.useradmin.UserDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
@@ -17,7 +18,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class WebsocketDisconnectEventListener implements ApplicationListener<SessionDisconnectEvent> {
 
-    private final ActiveUserAdministration userAdministration;
+    private final ActiveUsersWebSocketHandler webSocketHandler;
 
     @Override
     @EventListener
@@ -25,6 +26,6 @@ public class WebsocketDisconnectEventListener implements ApplicationListener<Ses
         var user = Optional.ofNullable(event.getUser());
         var name = user.map(Principal::getName).orElse("Dummy");
         log.info(name + " has disconnected");
-        userAdministration.removeFromActiveUsers(name);
+        webSocketHandler.removeFromActiveUsers(name);
     }
 }
