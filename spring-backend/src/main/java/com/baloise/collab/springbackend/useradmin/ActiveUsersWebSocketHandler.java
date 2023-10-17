@@ -1,8 +1,6 @@
 package com.baloise.collab.springbackend.useradmin;
 
 import lombok.RequiredArgsConstructor;
-import org.apache.catalina.User;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.simp.annotation.SubscribeMapping;
 import org.springframework.stereotype.Controller;

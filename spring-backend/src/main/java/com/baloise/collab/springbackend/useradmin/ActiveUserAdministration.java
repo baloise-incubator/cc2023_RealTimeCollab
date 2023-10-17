@@ -3,12 +3,9 @@ package com.baloise.collab.springbackend.useradmin;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
-import org.springframework.messaging.simp.annotation.SubscribeMapping;
 import org.springframework.stereotype.Component;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Random;
-import java.util.Set;
+
+import java.util.*;
 
 @Component
 @RequiredArgsConstructor
@@ -26,21 +23,23 @@ public class ActiveUserAdministration {
     private Random random = new Random();
 
     public void addToActiveUsers(String name) {
-        var userToRemove = activeUsers.stream()
-                .filter(userDTO -> Objects.equals(userDTO.name(), name))
-                .findFirst();
-        if(!userToRemove.isPresent()){
+        var userToAdd = getActiveUserForName(name);
+        if (!userToAdd.isPresent()) {
             var userDTO = new UserDTO(name, colors[random.nextInt(0, 4)]);
             activeUsers.add(userDTO);
             log.info(userDTO.name() + " added to active Users");
         }
     }
 
-    public void removeFromActiveUsers(String name) {
-        var userToRemove = activeUsers.stream()
+    public Optional<UserDTO> getActiveUserForName(String name) {
+        return activeUsers.stream()
                 .filter(userDTO -> Objects.equals(userDTO.name(), name))
                 .findFirst();
-        if(userToRemove.isPresent()) {
+    }
+
+    public void removeFromActiveUsers(String name) {
+        var userToRemove = getActiveUserForName(name);
+        if (userToRemove.isPresent()) {
             activeUsers.remove(userToRemove.get());
             log.info(name + " removed from active Users");
         }
