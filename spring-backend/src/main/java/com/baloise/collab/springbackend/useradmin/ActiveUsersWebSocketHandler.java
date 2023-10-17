@@ -24,7 +24,7 @@ public class ActiveUsersWebSocketHandler {
 
     public void removeFromActiveUsers(String name) {
         userAdministration.removeFromActiveUsers(name);
-        messageSender.convertAndSend("/app/activeUsers",
+        messageSender.convertAndSend("/topic/activeUsers",
                 userAdministration.getActiveUsers());
     }
 
