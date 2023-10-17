@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Client } from '@stomp/stompjs';
-import {Button, Credentials, Stock, User} from "../model";
+import {Button, Credentials, Cursor, Stock, User} from "../model";
 import { HttpService } from 'src/http.service';
 
 @Component({
@@ -13,6 +13,8 @@ export class AppComponent implements OnDestroy {
   client: Client;
   httpService: HttpService;
   users: User[] = []
+  currentUser = ""
+  cursors: Cursor[] = []
 
   constructor() {
     this.httpService = new HttpService();
@@ -33,6 +35,7 @@ export class AppComponent implements OnDestroy {
       this.client.subscribe("/topic/stocks", (payload) => this.updateStocks(JSON.parse(payload.body) as Stock));
       this.client.subscribe("/app/activeUsers", (payload) => this.users = JSON.parse(payload.body));
       this.client.subscribe("/topic/activeUsers", (payload) => this.users = JSON.parse(payload.body));
+      this.client.subscribe("/topic/cursor", (payload => this.updateCursors(JSON.parse(payload.body))));
     };
 
     this.client.onWebSocketError = (error) => {
@@ -54,8 +57,8 @@ export class AppComponent implements OnDestroy {
   }
 
   onConnectToBackend(credentials: Credentials) {
-    console.log(credentials);
-    this.openWebSocketConnection(credentials)
+    this.openWebSocketConnection(credentials);
+    this.currentUser = credentials.username;
   }
 
   updateStocks(stock: Stock) {
@@ -65,5 +68,23 @@ export class AppComponent implements OnDestroy {
   onBuyStock() {
     const payload = { user: "John Doe" } as Button
     this.client?.publish({ destination: "/app/button", body: JSON.stringify(payload) });
+  }
+
+  mouseMoved(event: MouseEvent) {
+    const payload = {posX: event.pageX, posY: event.pageY};
+    this.client?.publish({ destination: "/app/cursor", body: JSON.stringify(payload)});
+  }
+
+  updateCursors(newPosition: Cursor) {
+    if (this.currentUser === newPosition.name) {
+      return
+    }
+    const currentCursor = this.cursors.findIndex((cursor) => cursor.name === newPosition.name);
+
+    if (currentCursor === -1) {
+      this.cursors.push(newPosition);
+    } else {
+      this.cursors[currentCursor] = newPosition;
+    }
   }
 }

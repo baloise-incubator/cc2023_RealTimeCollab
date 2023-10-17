@@ -1,4 +1,5 @@
-<bal-app class="has-sticky-footer">
+<bal-app class="has-sticky-footer" style="position: relative;" (mousemove)="mouseMoved($event)">
+  <bal-icon *ngFor="let cursor of cursors" name="edit" style="z-index: 1000; position: absolute;" [ngStyle]="{'top': cursor.posY + 'px', 'left': cursor.posX + 'px'}" color="danger"></bal-icon>
   <header>
     <!-- Header content -->
     <bal-navbar interface="app">
@@ -16,7 +17,7 @@
       </bal-navbar-menu>
     </bal-navbar>
   </header>
-  <main class="container">
+  <main>
     <!-- Your application content -->
     <bal-heading space="all">Hello Websockets!</bal-heading>
     <app-check-in *ngIf="!client.active" (onCheckin)="onConnectToBackend($event)"></app-check-in>

@@ -22,3 +22,10 @@ export interface User {
     name: string
     color: string
 }
+
+export interface Cursor {
+    name: string
+    color: string;
+    posX: number;
+    posY: number;
+}
