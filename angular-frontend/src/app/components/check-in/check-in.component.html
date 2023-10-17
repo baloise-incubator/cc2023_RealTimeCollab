@@ -1,0 +1,13 @@
+<div class="columns checkin-flex">
+    <bal-heading class="mt-xx-large" space="all">Check in</bal-heading>
+    <div class="column is-one-third checkin-flex-column">
+        <bal-card  class="checkin-form-card">
+            <bal-card-content>
+                <form [formGroup]="form">
+                    <bal-input [invalid]="form.invalid && form.touched" formControlName="username" placeholder="Please pick a username"></bal-input>
+                    <bal-button class="mt-medium" expanded="" (click)="onCheckIn()">Enter Board</bal-button>
+                </form>
+            </bal-card-content>
+        </bal-card>
+    </div>
+</div>

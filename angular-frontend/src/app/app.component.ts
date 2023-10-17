@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Client } from '@stomp/stompjs';
+import {Button, Stock} from "../model";
 
 @Component({
   selector: 'app-root',
@@ -7,7 +8,7 @@ import { Client } from '@stomp/stompjs';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit, OnDestroy {
-  stock: any = {}
+  stock?: Stock
   client: Client;
 
   constructor() {
@@ -25,7 +26,7 @@ export class AppComponent implements OnInit, OnDestroy {
   openWebSocketConnection() {
     this.client.onConnect = () => {
       this.client?.subscribe("/topic/stocks", (payload) => {
-        this.updateStocks(JSON.parse(payload.body));
+        this.updateStocks(JSON.parse(payload.body) as Stock);
       });
     };
 
@@ -47,12 +48,12 @@ export class AppComponent implements OnInit, OnDestroy {
     }
   }
 
-  updateStocks(stock: any) {
+  updateStocks(stock: Stock) {
     this.stock = stock;
   }
 
   onBuyStock() {
-    var payload = { user: "John Doe" }
+    const payload = { user: "John Doe" } as Button
     this.client?.publish({ destination: "/app/button", body: JSON.stringify(payload) });
   }
 }

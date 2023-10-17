@@ -19,7 +19,9 @@
     "@angular/platform-browser-dynamic": "^16.2.0",
     "@angular/router": "^16.2.0",
     "@baloise/design-system-components-angular": "^14.0.1",
+    "@baloise/web-app-validators-angular": "^3.11.2",
     "@stomp/stompjs": "^7.0.0",
+    "net": "^1.0.2",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.13.0"

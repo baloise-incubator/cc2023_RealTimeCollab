@@ -1,0 +1,20 @@
+.checkin-flex {
+  display:flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.checkin-form-card {
+  position:relative;
+}
+
+.checkin-bg {
+  position:absolute;
+}
+
+.logo-bounding-box {
+  width: 50%;
+  display:flex;
+  align-items: center;
+  justify-content: center;
+}
