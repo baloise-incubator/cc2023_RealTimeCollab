@@ -27,8 +27,8 @@ public class ButtonWebSocketHandler {
         var optionalToken = Optional.ofNullable((UsernamePasswordAuthenticationToken) message.getHeaders().get("simpUser"));
         String userName = optionalToken.map(AbstractAuthenticationToken::getName).orElse("dummyUser");
 
-        log.info(message.getPayload().toString() + " send by " + userName);
-        var dto =  objectMapper.readValue(message.getPayload().toString(), ButtonMessageDTO.class);
+        log.info(message.getPayload() + " send by " + userName);
+        var dto =  objectMapper.readValue(message.getPayload(), ButtonMessageDTO.class);
         var entity = new ButtonMessageEntity();
         entity.setUserName(userName);
         superRepository.save(entity);
