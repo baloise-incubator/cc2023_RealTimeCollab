@@ -11,7 +11,8 @@ import {CheckInForm} from "../../../model";
 export class CheckInComponent {
 
     form = new FormGroup({
-       username: new FormControl("", BalValidators.isRequired())
+        username: new FormControl("", BalValidators.isRequired()),
+        passcode: new FormControl("", BalValidators.isRequired())
     });
 
     onCheckIn() {

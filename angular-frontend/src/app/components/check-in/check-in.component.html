@@ -4,7 +4,8 @@
         <bal-card  class="checkin-form-card">
             <bal-card-content>
                 <form [formGroup]="form">
-                    <bal-input [invalid]="form.invalid && form.touched" formControlName="username" placeholder="Please pick a username"></bal-input>
+                    <bal-input [invalid]="form.controls.username.invalid && form.touched" formControlName="username" placeholder="Please pick a username"></bal-input>
+                    <bal-input class="mt-small" type="password" [invalid]="form.controls.passcode.invalid && form.touched" formControlName="passcode" placeholder="Enter room passcode"></bal-input>
                     <bal-button class="mt-medium" expanded="" (click)="onCheckIn()">Enter Board</bal-button>
                 </form>
             </bal-card-content>
