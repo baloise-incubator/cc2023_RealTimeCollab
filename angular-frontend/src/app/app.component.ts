@@ -33,8 +33,8 @@ export class AppComponent implements OnDestroy {
 
     this.client.onConnect = () => {
       this.client.subscribe("/topic/stocks", (payload) => this.updateStocks(JSON.parse(payload.body) as Stock));
-      this.client.subscribe("/app/activeUsers", (payload) => this.users = JSON.parse(payload.body));
-      this.client.subscribe("/topic/activeUsers", (payload) => this.users = JSON.parse(payload.body));
+      this.client.subscribe("/app/activeUsers", (payload) => this.updateUsers(JSON.parse(payload.body)));
+      this.client.subscribe("/topic/activeUsers", (payload) => this.updateUsers(JSON.parse(payload.body)));
       this.client.subscribe("/topic/cursor", (payload => this.updateCursors(JSON.parse(payload.body))));
     };
 
@@ -86,5 +86,10 @@ export class AppComponent implements OnDestroy {
     } else {
       this.cursors[currentCursor] = newPosition;
     }
+  }
+
+  updateUsers(users: User[]) {
+    this.users = users;
+    this.cursors = this.cursors.filter(cursor => users.find(user => user.name === cursor.name));
   }
 }
