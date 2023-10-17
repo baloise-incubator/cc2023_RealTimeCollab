@@ -6,7 +6,11 @@ import lombok.extern.java.Log;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.security.authentication.AbstractAuthenticationToken;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Controller;
+
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Log
@@ -20,10 +24,13 @@ public class ButtonWebSocketHandler {
     @MessageMapping("/button")
     @SendTo("/topic/stocks")
     public Stock handleTextMessage(Message<String> message) throws Exception {
-        log.info(message.getPayload().toString());
+        var optionalToken = Optional.ofNullable((UsernamePasswordAuthenticationToken) message.getHeaders().get("simpUser"));
+        String userName = optionalToken.map(AbstractAuthenticationToken::getName).orElse("dummyUser");
+
+        log.info(message.getPayload().toString() + "send by" + userName);
         var dto =  objectMapper.readValue(message.getPayload().toString(), ButtonMessageDTO.class);
         var entity = new ButtonMessageEntity();
-        entity.setUserName(dto.user);
+        entity.setUserName(userName);
         superRepository.save(entity);
         return updateStockPrice();
     }
