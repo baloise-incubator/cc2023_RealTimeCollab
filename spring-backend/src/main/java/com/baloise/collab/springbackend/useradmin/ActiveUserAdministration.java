@@ -17,7 +17,7 @@ public class ActiveUserAdministration {
 
     private final String[] colors =
             {
-                    "#1b5951", "#6c2273", "#99172d", "#b24a00"
+                    "primary", "grey", "success", "warning", "danger"
             };
 
     private Random random = new Random();

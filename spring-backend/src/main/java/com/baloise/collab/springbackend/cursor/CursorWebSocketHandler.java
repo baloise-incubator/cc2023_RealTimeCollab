@@ -31,7 +31,7 @@ public class CursorWebSocketHandler {
         log.info(message.getPayload() + " send by " + userName);
         var dto =  objectMapper.readValue(message.getPayload(), IncomingCursorDTO.class);
         var userDTO = userAdministration.getActiveUserForName(userName);
-        var color = userDTO.map(UserDTO::color).orElse("#00000");
+        var color = userDTO.map(UserDTO::color).orElse("default");
         return new OutgoingCursorDTO(userName, color, dto.posX(), dto.posY());
     }
 }
