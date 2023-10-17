@@ -28,7 +28,6 @@ public class CursorWebSocketHandler {
         var optionalToken = Optional.ofNullable((UsernamePasswordAuthenticationToken) message.getHeaders().get("simpUser"));
         String userName = optionalToken.map(AbstractAuthenticationToken::getName).orElse("dummyUser");
 
-        log.info(message.getPayload() + " send by " + userName);
         var dto =  objectMapper.readValue(message.getPayload(), IncomingCursorDTO.class);
         var userDTO = userAdministration.getActiveUserForName(userName);
         var color = userDTO.map(UserDTO::color).orElse("default");

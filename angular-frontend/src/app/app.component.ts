@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, HostListener } from '@angular/core';
 import { Client } from '@stomp/stompjs';
 import {Button, Credentials, Cursor, Stock, User, Inventory} from "../model";
 import { HttpService } from 'src/http.service';
@@ -83,8 +83,30 @@ export class AppComponent implements OnDestroy {
   }
 
   mouseMoved(event: MouseEvent) {
-    const payload = {posX: event.pageX, posY: event.pageY};
-    this.client?.publish({ destination: "/app/cursor", body: JSON.stringify(payload)});
+    if(this.client.connected) {
+      const payload = {posX: event.pageX, posY: event.pageY};
+      this.client?.publish({destination: "/app/cursor", body: JSON.stringify(payload)});
+    }
+  }
+
+  @HostListener('window:keyup', ['$event'])
+  keyEvent(event: KeyboardEvent) {
+    if(this.client.connected){
+      console.log("KeyEvent: " + event.code);
+      if(event.key == "j"){
+        const payload = "joining_game"
+        this.client?.publish({ destination: "/app/match_join", body: JSON.stringify(payload)});
+      } else if(event.key == "ArrowLeft") {
+
+      } else if(event.key == "ArrowRight") {
+
+      } else if(event.key == "ArrowDown") {
+
+      } else if(event.key == "ArrowUp") {
+
+      }
+    }
+
   }
 
   updateCursors(newPosition: Cursor) {
