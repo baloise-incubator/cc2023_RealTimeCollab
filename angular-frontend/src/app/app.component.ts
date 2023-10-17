@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Client } from '@stomp/stompjs';
-import {Button, Credentials, Stock} from "../model";
+import {Button, Credentials, Stock, User} from "../model";
 import { HttpService } from 'src/http.service';
 
 @Component({
@@ -12,6 +12,7 @@ export class AppComponent implements OnDestroy {
   stock?: Stock;
   client: Client;
   httpService: HttpService;
+  users: User[] = []
 
   constructor() {
     this.httpService = new HttpService();
@@ -29,9 +30,8 @@ export class AppComponent implements OnDestroy {
      })
 
     this.client.onConnect = () => {
-      this.client?.subscribe("/topic/stocks", (payload) => {
-        this.updateStocks(JSON.parse(payload.body) as Stock);
-      });
+      this.client.subscribe("/topic/stocks", (payload) => this.updateStocks(JSON.parse(payload.body) as Stock));
+      this.client.subscribe("/topic/activeUsers", (payload) => this.users = JSON.parse(payload.body));
     };
 
     this.client.onWebSocketError = (error) => {

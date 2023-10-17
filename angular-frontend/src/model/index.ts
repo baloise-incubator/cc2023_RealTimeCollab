@@ -17,3 +17,8 @@ export interface Credentials {
     username: string
     passcode: string
 }
+
+export interface User {
+    name: string
+    color: string
+}
