@@ -8,6 +8,7 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.messaging.SessionConnectedEvent;
+import org.springframework.web.socket.messaging.SessionSubscribeEvent;
 
 import java.security.Principal;
 import java.util.*;
@@ -15,13 +16,13 @@ import java.util.*;
 @Component
 @RequiredArgsConstructor
 @Log
-public class WebsocketConnectEventListener implements ApplicationListener<SessionConnectedEvent> {
+public class WebsocketConnectEventListener implements ApplicationListener<SessionSubscribeEvent> {
 
     private final ActiveUserAdministration userAdministration;
 
     @Override
     @EventListener
-    public void onApplicationEvent(SessionConnectedEvent event) {
+    public void onApplicationEvent(SessionSubscribeEvent event) {
         var user = Optional.ofNullable(event.getUser());
         var name = user.map(Principal::getName).orElse("Dummy");
         log.info(name + " has connected");
