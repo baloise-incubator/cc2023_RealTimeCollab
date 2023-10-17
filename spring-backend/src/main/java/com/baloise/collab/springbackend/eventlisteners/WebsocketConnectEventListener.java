@@ -19,19 +19,12 @@ public class WebsocketConnectEventListener implements ApplicationListener<Sessio
 
     private final ActiveUserAdministration userAdministration;
 
-    private Random random = new Random();
-
-    private final String[] colors =
-    {
-        "#1b5951", "#6c2273", "#99172d", "#b24a00"
-    };
-
     @Override
     @EventListener
     public void onApplicationEvent(SessionConnectedEvent event) {
         var user = Optional.ofNullable(event.getUser());
         var name = user.map(Principal::getName).orElse("Dummy");
         log.info(name + " has connected");
-        userAdministration.addToActiveUsers(new UserDTO(name, colors[random.nextInt(0, 4)]));
+        userAdministration.addToActiveUsers(name);
     }
 }

@@ -6,6 +6,7 @@ import lombok.extern.java.Log;
 import org.springframework.stereotype.Component;
 import java.util.HashSet;
 import java.util.Objects;
+import java.util.Random;
 import java.util.Set;
 
 @Component
@@ -18,8 +19,19 @@ public class ActiveUserAdministration {
     @Getter
     private final Set<UserDTO> activeUsers = new HashSet<>();
 
-    public void addToActiveUsers(UserDTO userDTO) {
-        if(!activeUsers.contains(userDTO)){
+    private final String[] colors =
+            {
+                    "#1b5951", "#6c2273", "#99172d", "#b24a00"
+            };
+
+    private Random random = new Random();
+
+    public void addToActiveUsers(String name) {
+        var userToRemove = activeUsers.stream()
+                .filter(userDTO -> Objects.equals(userDTO.name(), name))
+                .findFirst();
+        if(!userToRemove.isPresent()){
+            var userDTO = new UserDTO(name, colors[random.nextInt(0, 4)]);
             activeUsers.add(userDTO);
             log.info(userDTO.name() + " added to active Users");
             userWebSocketHandler.updateActiveUsers(activeUsers);
