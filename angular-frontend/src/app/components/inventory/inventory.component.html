@@ -1,0 +1,11 @@
+<bal-card>
+    <bal-card-title>
+        Inventory {{inventory.owner}}
+    </bal-card-title>
+    <bal-card-content>
+        <div class="inventory-grid" (drop)="onDrop($event)" (dragenter)="onDragEnter($event)" (dragover)="onDragOver($event)">
+            <app-inventory-item [item]="item" *ngFor="let item of inventory.items"></app-inventory-item>
+            <bal-button square="" inverted="" icon="plus" (click)="temporarySpawn()"></bal-button>
+        </div>
+    </bal-card-content>
+</bal-card>

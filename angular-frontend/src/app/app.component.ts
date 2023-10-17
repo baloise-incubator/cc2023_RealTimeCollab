@@ -1,6 +1,6 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { Client } from '@stomp/stompjs';
-import {Button, Credentials, Cursor, Stock, User} from "../model";
+import {Button, Credentials, Cursor, Stock, User, Inventory} from "../model";
 import { HttpService } from 'src/http.service';
 
 @Component({
@@ -15,6 +15,18 @@ export class AppComponent implements OnDestroy {
   users: User[] = []
   currentUser = ""
   cursors: Cursor[] = []
+
+  alexInventory = {
+    owner: "Alex",
+    uuid: crypto.randomUUID(),
+    items: [],
+  } as Inventory
+
+  chestInventory = {
+    owner: "Chest",
+    uuid: crypto.randomUUID(),
+    items: [],
+  } as Inventory
 
   constructor() {
     this.httpService = new HttpService();

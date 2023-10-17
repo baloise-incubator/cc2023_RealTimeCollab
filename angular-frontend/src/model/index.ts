@@ -29,3 +29,14 @@ export interface Cursor {
     posX: number;
     posY: number;
 }
+
+export interface Item {
+    uuid: string;
+    name: string;
+}
+
+export interface Inventory {
+    uuid: string;
+    owner?: string;
+    items: Item[];
+}

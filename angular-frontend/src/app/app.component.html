@@ -18,6 +18,8 @@
     </bal-navbar>
   </header>
   <main>
+    <app-inventory [inventory]="alexInventory"></app-inventory>
+    <app-inventory [inventory]="chestInventory"></app-inventory>
     <!-- Your application content -->
     <bal-heading space="all">Hello Websockets!</bal-heading>
     <app-check-in *ngIf="!client.active" (onCheckin)="onConnectToBackend($event)"></app-check-in>
@@ -29,7 +31,7 @@
     </bal-card>
     <div *ngIf="client.connected">
       <bal-button-group>
-        <bal-button color="success" square icon="plus" (click)="onBuyStock()"></bal-button>
+        <bal-button color="success" square="" icon="plus" (click)="onBuyStock()"></bal-button>
       </bal-button-group>
       <bal-card *ngIf="stock">
         <bal-badge [color]="stock.increased ? 'success' : 'danger'" position="card">{{stock.increased ? "▲" :
@@ -46,7 +48,7 @@
               </p>
             </div>
             <bal-button-group>
-              <bal-button color="success" square icon="plus" (click)="onBuyStock()"></bal-button>
+              <bal-button color="success" square="" icon="plus" (click)="onBuyStock()"></bal-button>
             </bal-button-group>
             <div class="mx-small"><bal-tag>now</bal-tag></div>
           </div>
