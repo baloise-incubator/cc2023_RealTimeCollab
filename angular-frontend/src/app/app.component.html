@@ -22,14 +22,13 @@
           <bal-heading level="h5" space="all">Please wait...</bal-heading>
       </bal-card-content>
     </bal-card>
-    <div *ngIf="client.connected" class="columns">
-      <div class="column is-9">
-        <app-inventory [inventory]="alexInventory"></app-inventory>
-        <app-inventory [inventory]="chestInventory"></app-inventory>
-    </div>
-    <div class="column is-3">
-        <app-chat [client]="client" [currentUser]="currentUser"></app-chat>
-    </div>
+    <div *ngIf="client.connected && inventories" class="columns">
+        <div class="column is-9">
+            <app-inventory *ngFor="let inventory of inventories" [inventory]="inventory"></app-inventory>
+        </div>
+        <div class="column is-3">
+            <app-chat [client]="client" [currentUser]="currentUser"></app-chat>
+        </div>
     </div>
   </main>
   <bal-footer>

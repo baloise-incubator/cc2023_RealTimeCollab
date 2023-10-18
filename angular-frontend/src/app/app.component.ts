@@ -9,27 +9,16 @@ import { HttpService } from 'src/http.service';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnDestroy {
-  
+
   client: Client;
   httpService: HttpService;
-  users: User[] = []
-  currentUser = ""
-  cursors: Cursor[] = []
+  users: User[] = [];
+  currentUser = "";
+  cursors: Cursor[] = [];
+  inventories?: Inventory[];
 
   // Game stuff
   characters: Character[] = []
-
-  alexInventory = {
-    owner: "Alex",
-    uuid: crypto.randomUUID(),
-    items: [],
-  } as Inventory
-
-  chestInventory = {
-    owner: "Chest",
-    uuid: crypto.randomUUID(),
-    items: [],
-  } as Inventory
 
   constructor() {
     this.httpService = new HttpService();
@@ -50,6 +39,8 @@ export class AppComponent implements OnDestroy {
       this.client.subscribe("/app/activeUsers", (payload) => this.updateUsers(JSON.parse(payload.body)));
       this.client.subscribe("/topic/activeUsers", (payload) => this.updateUsers(JSON.parse(payload.body)));
       this.client.subscribe("/topic/cursor", (payload => this.updateCursors(JSON.parse(payload.body))));
+      this.client.subscribe("/app/inventory", (payload => this.updateInventory(JSON.parse(payload.body))));
+      this.client.subscribe("/topic/inventory", (payload => this.updateInventory(JSON.parse(payload.body))));
       this.client.subscribe("/topic/game/character", (payload => this.updateCharacter(JSON.parse(payload.body))))
     };
 
@@ -118,6 +109,10 @@ export class AppComponent implements OnDestroy {
   updateUsers(users: User[]) {
     this.users = users;
     this.cursors = this.cursors.filter(cursor => users.find(user => user.name === cursor.name));
+  }
+
+  private updateInventory(inventories: Inventory[]) {
+    this.inventories = inventories;
   }
 
   updateCharacter(character : Character) {

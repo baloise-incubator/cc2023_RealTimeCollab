@@ -27,7 +27,7 @@ export class InventoryComponent implements OnInit {
   }
 
   temporarySpawn() {
-    this.insertItem({uuid: crypto.randomUUID(), name: 'gold'})
+    this.insertItem({id: crypto.randomUUID(), name: 'gold'})
   }
 
   onDrop(event: DragEvent) {
