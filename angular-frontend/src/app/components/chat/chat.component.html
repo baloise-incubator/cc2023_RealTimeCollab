@@ -1,1 +1,21 @@
-<p>chat works!</p>
+<bal-heading level="medium">Chat</bal-heading>
+
+<bal-stack layout="vertical" style="overflow-y: auto; height: 50vh;">
+    <bal-card flat *ngIf="!messages || messages.length === 0">
+        <bal-card-subtitle>No message received!</bal-card-subtitle>
+    </bal-card>
+    <bal-card flat *ngFor="let message of messages">
+        <bal-card-subtitle>
+            {{ message.timestamp.toLocaleString() }}
+            <bal-tag class="ml-small" [color]="message.user.color">{{ message.user.name }}</bal-tag>
+        </bal-card-subtitle>
+        <bal-card-content>{{ message.text }}</bal-card-content>
+    </bal-card>
+</bal-stack>
+
+<bal-card class="mt-medium">
+    <bal-card-content class="is-flex fg-small">
+        <input [(ngModel)]="messageText" class="bal-input input" (keyup.enter)="sendMessage()" #chatMessageBox />
+        <bal-button (click)="sendMessage()"><bal-icon name="send"></bal-icon></bal-button>
+    </bal-card-content>
+</bal-card>

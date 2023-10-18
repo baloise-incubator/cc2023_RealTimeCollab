@@ -47,3 +47,9 @@ export interface Inventory {
     owner?: string;
     items: Item[];
 }
+
+export interface ChatMessage {
+    user: User,
+    text: string,
+    timestamp: Date
+}
