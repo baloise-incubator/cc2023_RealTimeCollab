@@ -9,7 +9,7 @@ import { HttpService } from 'src/http.service';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnDestroy {
-  stock?: Stock;
+  
   client: Client;
   httpService: HttpService;
   users: User[] = []
@@ -44,7 +44,6 @@ export class AppComponent implements OnDestroy {
      })
 
     this.client.onConnect = () => {
-      this.client.subscribe("/topic/stocks", (payload) => this.updateStocks(JSON.parse(payload.body) as Stock));
       this.client.subscribe("/app/activeUsers", (payload) => this.updateUsers(JSON.parse(payload.body)));
       this.client.subscribe("/topic/activeUsers", (payload) => this.updateUsers(JSON.parse(payload.body)));
       this.client.subscribe("/topic/cursor", (payload => this.updateCursors(JSON.parse(payload.body))));
@@ -63,7 +62,6 @@ export class AppComponent implements OnDestroy {
 
   closeWebSocketConnection() {
     if (this.client) {
-      this.client.unsubscribe("/topic/stocks");
       this.client.deactivate();
     }
   }
@@ -71,15 +69,6 @@ export class AppComponent implements OnDestroy {
   onConnectToBackend(credentials: Credentials) {
     this.openWebSocketConnection(credentials);
     this.currentUser = credentials.username;
-  }
-
-  updateStocks(stock: Stock) {
-    this.stock = stock;
-  }
-
-  onBuyStock() {
-    const payload = { user: "John Doe" } as Button
-    this.client?.publish({ destination: "/app/button", body: JSON.stringify(payload) });
   }
 
   mouseMoved(event: MouseEvent) {
