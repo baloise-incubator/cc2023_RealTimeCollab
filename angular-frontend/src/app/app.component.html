@@ -13,11 +13,8 @@
       </bal-navbar-menu>
     </bal-navbar>
   </header>
-  <main>
-    <app-inventory [inventory]="alexInventory"></app-inventory>
-    <app-inventory [inventory]="chestInventory"></app-inventory>
+  <main class="container is-fluid py-medium">
     <!-- Your application content -->
-    <bal-heading space="all">Hello Websockets!</bal-heading>
     <app-check-in *ngIf="!client.active" (onCheckin)="onConnectToBackend($event)"></app-check-in>
     <bal-card *ngIf="client.active && !client.connected">
       <bal-card-content class="is-flex is-align-items-center is-flex-direction-column is-justify-content-center">
@@ -27,7 +24,8 @@
     </bal-card>
     <div *ngIf="client.connected" class="columns">
       <div class="column is-9">
-        <app-stock [client]="client"></app-stock>
+        <app-inventory [inventory]="alexInventory"></app-inventory>
+        <app-inventory [inventory]="chestInventory"></app-inventory>
     </div>
     <div class="column is-3">
         <app-chat [client]="client" [currentUser]="currentUser"></app-chat>
