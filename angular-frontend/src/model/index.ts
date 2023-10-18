@@ -30,6 +30,13 @@ export interface Cursor {
     posY: number;
 }
 
+export interface Character {
+    name: string
+    color: string;
+    posX: number;
+    posY: number;
+}
+
 export interface Item {
     uuid: string;
     name: string;

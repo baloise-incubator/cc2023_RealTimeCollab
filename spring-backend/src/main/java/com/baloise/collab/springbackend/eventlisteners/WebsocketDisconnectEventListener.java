@@ -1,5 +1,7 @@
 package com.baloise.collab.springbackend.eventlisteners;
 
+import com.baloise.collab.springbackend.cursor.CursorWebSocketHandler;
+import com.baloise.collab.springbackend.game.CharacterController;
 import com.baloise.collab.springbackend.useradmin.ActiveUserAdministration;
 import com.baloise.collab.springbackend.useradmin.ActiveUsersWebSocketHandler;
 import com.baloise.collab.springbackend.useradmin.UserDTO;
@@ -19,6 +21,7 @@ import java.util.Optional;
 public class WebsocketDisconnectEventListener implements ApplicationListener<SessionDisconnectEvent> {
 
     private final ActiveUsersWebSocketHandler webSocketHandler;
+    private final CharacterController characterController;
 
     @Override
     @EventListener
@@ -27,5 +30,7 @@ public class WebsocketDisconnectEventListener implements ApplicationListener<Ses
         var name = user.map(Principal::getName).orElse("Dummy");
         log.info(name + " has disconnected");
         webSocketHandler.removeFromActiveUsers(name);
+        characterController.removeFromActiveCharacters(name);
+
     }
 }

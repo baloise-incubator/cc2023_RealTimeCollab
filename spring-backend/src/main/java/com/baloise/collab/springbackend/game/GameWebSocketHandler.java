@@ -1,7 +1,6 @@
-package com.baloise.collab.springbackend.cursor;
+package com.baloise.collab.springbackend.game;
 
 import com.baloise.collab.springbackend.useradmin.ActiveUserAdministration;
-import com.baloise.collab.springbackend.useradmin.UserDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
@@ -17,21 +16,26 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Log
 @Controller
-public class CursorWebSocketHandler {
+public class GameWebSocketHandler {
 
     private final ObjectMapper objectMapper;
+    private final CharacterController characterController;
     private final ActiveUserAdministration userAdministration;
 
-    @MessageMapping("/cursor")
-    @SendTo("/topic/cursor")
-    public OutgoingCursorDTO handleCursorUpdate(Message<String> message) throws Exception {
+    @MessageMapping("/match_join")
+    @SendTo("/topic/game/character")
+    public CharacterDTO handlePlayerJoin(Message<String> message) throws Exception {
         var optionalToken = Optional.ofNullable((UsernamePasswordAuthenticationToken) message.getHeaders().get("simpUser"));
         String userName = optionalToken.map(AbstractAuthenticationToken::getName).orElse("dummyUser");
 
-        var dto =  objectMapper.readValue(message.getPayload(), IncomingCursorDTO.class);
+        log.info( "User joining Match: " + userName);
         var userDTO = userAdministration.getActiveUserForName(userName);
-        var color = userDTO.map(UserDTO::color).orElse("default");
-        return new OutgoingCursorDTO(userName, color, dto.posX(), dto.posY());
-    }
+        if(userDTO.isPresent()){
+            return characterController.createCharacterForUser(userDTO.get());
+        } else {
+            throw new IllegalCallerException("No active User found to attach Character");
+        }
 
+
+    }
 }

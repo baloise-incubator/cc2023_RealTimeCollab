@@ -1,6 +1,6 @@
 import { Component, OnDestroy, HostListener } from '@angular/core';
 import { Client } from '@stomp/stompjs';
-import {Button, Credentials, Cursor, Stock, User, Inventory} from "../model";
+import {Button, Credentials, Cursor, Stock, User, Inventory, Character} from "../model";
 import { HttpService } from 'src/http.service';
 
 @Component({
@@ -15,6 +15,9 @@ export class AppComponent implements OnDestroy {
   users: User[] = []
   currentUser = ""
   cursors: Cursor[] = []
+
+  // Game stuff
+  characters: Character[] = []
 
   alexInventory = {
     owner: "Alex",
@@ -47,6 +50,7 @@ export class AppComponent implements OnDestroy {
       this.client.subscribe("/app/activeUsers", (payload) => this.updateUsers(JSON.parse(payload.body)));
       this.client.subscribe("/topic/activeUsers", (payload) => this.updateUsers(JSON.parse(payload.body)));
       this.client.subscribe("/topic/cursor", (payload => this.updateCursors(JSON.parse(payload.body))));
+      this.client.subscribe("/topic/game/character", (payload => this.updateCharacter(JSON.parse(payload.body))))
     };
 
     this.client.onWebSocketError = (error) => {
@@ -81,18 +85,18 @@ export class AppComponent implements OnDestroy {
   @HostListener('window:keyup', ['$event'])
   keyEvent(event: KeyboardEvent) {
     if(this.client.connected){
-      console.log("KeyEvent: " + event.code);
-      if(event.key == "j"){
+      const keyCode = event.code
+      console.log("KeyEvent: " + keyCode);
+
+      if(keyCode === "KeyJ"){
+        console.log("Joining Game:");
         const payload = "joining_game"
         this.client?.publish({ destination: "/app/match_join", body: JSON.stringify(payload)});
-      } else if(event.key == "ArrowLeft") {
-
-      } else if(event.key == "ArrowRight") {
-
-      } else if(event.key == "ArrowDown") {
-
-      } else if(event.key == "ArrowUp") {
-
+      } else if(keyCode === "ArrowLeft"
+          || keyCode === "ArrowRight"
+          || keyCode === "ArrowDown"
+          || keyCode === "ArrowUp") {
+        this.client?.publish({destination: "/app/game_control", body: JSON.stringify(keyCode)})
       }
     }
 
@@ -114,5 +118,15 @@ export class AppComponent implements OnDestroy {
   updateUsers(users: User[]) {
     this.users = users;
     this.cursors = this.cursors.filter(cursor => users.find(user => user.name === cursor.name));
+  }
+
+  updateCharacter(character : Character) {
+    const characterIndexToUpdate  = this.characters.findIndex((char) => char.name === character.name);
+
+    if (characterIndexToUpdate === -1) {
+      this.characters.push(character);
+    } else {
+      this.characters[characterIndexToUpdate] = character;
+    }
   }
 }
