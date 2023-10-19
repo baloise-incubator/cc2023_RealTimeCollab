@@ -17,6 +17,7 @@ jobs:
         with:
           node-version: 18.x
           cache: 'npm'
+          cache-dependency-path: './angular-frontend/package-lock.json'
       - name: Setup Angular Application
         run: npm ci
         working-directory: ./angular-frontend
