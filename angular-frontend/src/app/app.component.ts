@@ -18,9 +18,6 @@ export class AppComponent implements OnDestroy {
   cursors: Cursor[] = [];
   inventories?: Inventory[];
 
-  // Game stuff
-  characters: Character[] = []
-
   constructor() {
     this.httpService = new HttpService();
     this.client = new Client();
@@ -42,8 +39,6 @@ export class AppComponent implements OnDestroy {
       this.client.subscribe("/topic/cursor", (payload => this.updateCursors(JSON.parse(payload.body))));
       this.client.subscribe("/app/inventory", (payload => this.updateInventory(JSON.parse(payload.body))));
       this.client.subscribe("/topic/inventory", (payload => this.updateInventory(JSON.parse(payload.body))));
-      this.client.subscribe("/topic/game/character", (payload => this.updateCharacter(JSON.parse(payload.body))))
-      this.client.subscribe("/topic/game/character_removal", (payload => this.removeCharacter(JSON.parse(payload.body))))
     };
 
     this.client.onWebSocketError = (error) => {
@@ -147,17 +142,4 @@ export class AppComponent implements OnDestroy {
     });
   }
 
-  updateCharacter(character : Character) {
-    const characterIndexToUpdate  = this.characters.findIndex((char) => char.name === character.name);
-
-    if (characterIndexToUpdate === -1) {
-      this.characters.push(character);
-    } else {
-      this.characters[characterIndexToUpdate] = character;
-    }
-  }
-
-  removeCharacter(character : Character) {
-      this.characters = this.characters.filter(char => char.name != character.name)
-  }
 }

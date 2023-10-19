@@ -22,8 +22,8 @@ public class CharacterController {
 
     private final SimpMessagingTemplate messageSender;
 
-    private final int spawnX = 500;
-    private final int spawnY = 500;
+    private final int spawnX = 0;
+    private final int spawnY = 0;
 
     public CharacterDTO createCharacterForUser(UserDTO user) {
         var characterForUser = getActiveCharacterForName(user.name());

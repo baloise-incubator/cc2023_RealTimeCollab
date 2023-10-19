@@ -1,3 +1,4 @@
+<bal-icon *ngFor="let char of characters" name="account" style="z-index: 1000; position: absolute;" [ngStyle]="{'top': char.posY + 'px', 'left': char.posX + 'px'}" [color]="char.color"></bal-icon>
 <bal-card class="mt-medium">
   <bal-card-content class="is-flex fg-small">
     <bal-heading level="medium">Mini-Game</bal-heading>

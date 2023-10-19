@@ -1,6 +1,7 @@
 import {Component, HostListener, Input, OnDestroy, OnInit} from '@angular/core';
 
 import { Client } from '@stomp/stompjs';
+import {Character} from "../../../model";
 
 @Component({
   selector: 'app-game',
@@ -14,9 +15,13 @@ export class GameComponent implements OnInit, OnDestroy {
 
   connected : boolean = false;
 
+  // Game stuff
+  characters: Character[] = [];
+
   ngOnInit(): void {
     if (this.client.connected) {
-      //this.client.subscribe("/topic/chat", payload => this.addMessage(payload));
+      this.client.subscribe("/topic/game/character", (payload => this.updateCharacter(JSON.parse(payload.body))))
+      this.client.subscribe("/topic/game/character_removal", (payload => this.removeCharacter(JSON.parse(payload.body))))
     }
   }
 
@@ -69,6 +74,20 @@ export class GameComponent implements OnInit, OnDestroy {
       }
     }
 
+  }
+
+  updateCharacter(character : Character) {
+    const characterIndexToUpdate  = this.characters.findIndex((char) => char.name === character.name);
+    console.log("Character update");
+    if (characterIndexToUpdate === -1) {
+      this.characters.push(character);
+    } else {
+      this.characters[characterIndexToUpdate] = character;
+    }
+  }
+
+  removeCharacter(character : Character) {
+    this.characters = this.characters.filter(char => char.name != character.name)
   }
 
 }
