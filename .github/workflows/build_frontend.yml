@@ -19,8 +19,10 @@ jobs:
           cache: 'npm'
       - name: Setup Angular Application
         run: npm ci
+        working-directory: ./angular-frontend/
       - name: Build Angular Application
         run: ng build
+        working-directory: ./angular-frontend/
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
       - name: Login to DockerHub
