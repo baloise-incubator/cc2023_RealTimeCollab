@@ -1,7 +1,8 @@
 import { Component, OnDestroy, HostListener } from '@angular/core';
 import { Client } from '@stomp/stompjs';
-import {Button, Credentials, Cursor, Stock, User, Inventory, Character} from "../model";
+import {Button, Credentials, Cursor, Stock, User, Inventory, Character, Item} from "../model";
 import { HttpService } from 'src/http.service';
+import {CreateItemEvent} from "../events";
 
 @Component({
   selector: 'app-root',
@@ -112,7 +113,57 @@ export class AppComponent implements OnDestroy {
   }
 
   private updateInventory(inventories: Inventory[]) {
-    this.inventories = inventories;
+    console.log("inventory update", inventories)
+    if (!this.inventories) {
+      this.inventories = inventories;
+      return;
+    }
+
+    var newExceptEx = inventories.filter(x => !this.inventories!.find(y => x.id === y.id))
+    var exExceptNew = this.inventories.filter(x => !inventories!.find(y => x.id === y.id))
+    var toUpdate = this.inventories
+        .map(exInventory => ({ exInventory, newInventory: inventories!.find(x => exInventory.id === x.id) }))
+        .filter(x => !!x.newInventory)
+
+    for (const newInventory of newExceptEx) {
+      this.inventories.push(newInventory)
+    }
+    for (const exInventory of exExceptNew) {
+      this.inventories.splice(this.inventories.indexOf(exInventory), 1)
+    }
+    for (const inventories of toUpdate) {
+      this.updateItemsForInventory(inventories.exInventory, inventories.newInventory!.items)
+    }
+  }
+
+  private updateItemsForInventory(exInventory: Inventory, newItems: Item[]) {
+    if (!exInventory.items) {
+      exInventory.items = newItems;
+      return;
+    }
+
+    var newExceptEx = newItems.filter(x => !exInventory.items!.find(y => x.id === y.id))
+    var exExceptNew = exInventory.items.filter(x => !newItems!.find(y => x.id === y.id))
+    var toUpdate = exInventory.items
+        .map(exItem => ({ exItem, newItem: newItems!.find(x => exInventory.id === x.id) }))
+        .filter(x => !!x.newItem)
+
+    for (const newItem of newExceptEx) {
+      exInventory.items.push(newItem)
+    }
+    for (const exItem of exExceptNew) {
+      exInventory.items.splice(exInventory.items.indexOf(exItem), 1)
+    }
+    for (const items of toUpdate) {
+      items.exItem.name = items.newItem!.name
+    }
+  }
+
+  onItemCreated(event: CreateItemEvent, inventory: Inventory) {
+    this.client?.publish({destination: "/app/itemcreation", body: JSON.stringify({
+        name: event.name,
+        targetInventoryId: inventory.id})
+    });
   }
 
   updateCharacter(character : Character) {

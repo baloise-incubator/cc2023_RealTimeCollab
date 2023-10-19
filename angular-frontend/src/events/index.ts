@@ -4,3 +4,7 @@ export interface ItemDraggingEvent {
     target: Item
     to: Inventory
 }
+
+export interface CreateItemEvent {
+    name: string
+}

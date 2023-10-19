@@ -1,13 +1,14 @@
 package com.baloise.collab.springbackend.items;
 
-import com.baloise.collab.springbackend.SuperRepository;
-import com.baloise.collab.springbackend.useradmin.ActiveUserAdministration;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
+import org.springframework.messaging.Message;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 
-import java.util.Optional;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Log
@@ -15,17 +16,20 @@ import java.util.Optional;
 public class ItemsWebSocketHandler {
 
     private final ObjectMapper objectMapper;
-    private final ActiveUserAdministration userAdministration;
-    private final SuperRepository superRepository;
-/*
-    @MessageMapping("/items")
-    @SendTo("/topic/items")
-    public InventoryDto handleCursorUpdate(CreateItemDto newItem) throws Exception {
-        var itemEntity = new ItemEntity();
-        itemEntity.setInventory();
-        //var color = userDTO.map(UserDTO::color).orElse("default");
-        return new OutgoingCursorDTO(userName, color, dto.posX(), dto.posY());
-    }
+    private final InventoriesWebSocketHandler inventoriesWebSocketHandler;
+    private final InventoriesRepository inventoriesRepository;
+    private final ItemsRepository itemsRepository;
 
-    public*/
+    @MessageMapping("/itemcreation")
+    @SendTo("/topic/inventory")
+    public List<InventoryDto> handleItemCreation(Message<String> message) throws Exception {
+        var newItem = objectMapper.readValue(message.getPayload(), CreateItemDto.class);
+        var inventory = inventoriesRepository.findById(newItem.targetInventoryId()).orElseThrow();
+        var itemEntity = new ItemEntity()
+                .withName(newItem.name())
+                .withInventory(inventory);
+                //.withInventoryId(newItem.targetInventoryId());
+        itemsRepository.save(itemEntity);
+        return inventoriesWebSocketHandler.fetchAllInventories();
+    }
 }

@@ -19,6 +19,6 @@ public class InventoryEntity {
 
     private String owner;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "inventory")
     private List<ItemEntity> items;
 }

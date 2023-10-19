@@ -4,9 +4,8 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
-import java.util.UUID;
 
 @Repository
-public interface InventoriesRepository extends CrudRepository<InventoryEntity, UUID> {
+public interface InventoriesRepository extends CrudRepository<InventoryEntity, Long> {
     Optional<InventoryEntity> findByOwner(String user);
 }

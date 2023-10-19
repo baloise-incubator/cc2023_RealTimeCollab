@@ -7,7 +7,6 @@ import org.springframework.messaging.simp.annotation.SubscribeMapping;
 import org.springframework.stereotype.Controller;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,11 +31,20 @@ public class InventoriesWebSocketHandler {
         }
     }
 
-    private List<InventoryDto> fetchAllInventories() {
+    public List<InventoryDto> fetchAllInventories() {
         var inventories = new ArrayList<InventoryEntity>();
         inventoriesRepository.findAll().forEach(inventories::add);
-        return inventories.stream().map(entity -> {
-            return new InventoryDto(entity.getId(), entity.getOwner(), Collections.emptyList());
+        return inventories.stream().map(inventory -> {
+            return new InventoryDto(
+                    inventory.getId(),
+                    inventory.getOwner(),
+                    inventory.getItems().stream().map(item -> {
+                        return new ItemDto(
+                                item.getName(),
+                                item.getId(),
+                                item.getUserLock()
+                        );
+                    }).collect(Collectors.toList()));
         }).collect(Collectors.toList());
     }
 
