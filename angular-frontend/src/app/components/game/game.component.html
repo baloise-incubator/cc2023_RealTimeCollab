@@ -1,4 +1,5 @@
 <bal-icon *ngFor="let char of characters" name="account" style="z-index: 1000; position: absolute;" [ngStyle]="{'top': char.posY + 'px', 'left': char.posX + 'px'}" [color]="char.color"></bal-icon>
+<bal-icon *ngFor="let pickup of pickups" [name]=pickup.icon style="z-index: 9000; position: absolute;" [ngStyle]="{'top': pickup.posY + 'px', 'left': pickup.posX + 'px'}" [color]="pickup.color"></bal-icon>
 <bal-card class="mt-medium">
   <bal-card-content class="is-flex fg-small">
     <bal-heading level="medium">Mini-Game</bal-heading>

@@ -31,7 +31,14 @@ export interface Cursor {
 }
 
 export interface Character {
-    name: string
+    name: string;
+    color: string;
+    posX: number;
+    posY: number;
+}
+
+export interface Pickup {
+    icon: string;
     color: string;
     posX: number;
     posY: number;

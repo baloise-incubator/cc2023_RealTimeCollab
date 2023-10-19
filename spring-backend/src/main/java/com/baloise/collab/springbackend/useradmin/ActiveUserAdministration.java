@@ -1,5 +1,6 @@
 package com.baloise.collab.springbackend.useradmin;
 
+import com.baloise.collab.springbackend.ColorProvider;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
@@ -14,18 +15,12 @@ public class ActiveUserAdministration {
 
     @Getter
     private final Set<UserDTO> activeUsers = new HashSet<>();
-
-    private final String[] colors =
-            {
-                    "primary", "grey", "success", "warning", "danger"
-            };
-
     private Random random = new Random();
 
     public void addToActiveUsers(String name) {
         var userToAdd = getActiveUserForName(name);
-        if (!userToAdd.isPresent()) {
-            var userDTO = new UserDTO(name, colors[random.nextInt(0, 4)]);
+        if (userToAdd.isEmpty()) {
+            var userDTO = new UserDTO(name, ColorProvider.getColors()[random.nextInt(0, 4)]);
             activeUsers.add(userDTO);
             log.info(userDTO.name() + " added to active Users");
         }

@@ -9,7 +9,6 @@ import org.springframework.web.socket.config.annotation.*;
 @EnableWebSocketMessageBroker
 @RequiredArgsConstructor
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
-    private final ButtonWebSocketHandler buttonHandler;
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {

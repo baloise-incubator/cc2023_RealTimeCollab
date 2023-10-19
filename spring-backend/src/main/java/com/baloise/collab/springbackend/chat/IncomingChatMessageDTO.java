@@ -1,6 +1,6 @@
 package com.baloise.collab.springbackend.chat;
 
-record IncomingChatMessageDTO(
+public record IncomingChatMessageDTO(
     String text,
     String clientTimestamp
 ) {}

@@ -1,6 +1,5 @@
 package com.baloise.collab.springbackend.game;
 
-import com.baloise.collab.springbackend.ButtonMessageDTO;
 import com.baloise.collab.springbackend.useradmin.ActiveUserAdministration;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -14,7 +13,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.stereotype.Controller;
 
 import java.util.Optional;
-import java.util.concurrent.Future;
 
 @RequiredArgsConstructor
 @Log

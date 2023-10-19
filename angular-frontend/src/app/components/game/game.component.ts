@@ -1,7 +1,7 @@
 import {Component, HostListener, Input, OnDestroy, OnInit} from '@angular/core';
 
 import { Client } from '@stomp/stompjs';
-import {Character} from "../../../model";
+import {Character, Pickup} from "../../../model";
 
 @Component({
   selector: 'app-game',
@@ -17,17 +17,22 @@ export class GameComponent implements OnInit, OnDestroy {
 
   // Game stuff
   characters: Character[] = [];
+  pickups: Pickup[] = [];
 
   ngOnInit(): void {
     if (this.client.connected) {
       this.client.subscribe("/topic/game/character", (payload => this.updateCharacter(JSON.parse(payload.body))))
       this.client.subscribe("/topic/game/character_removal", (payload => this.removeCharacter(JSON.parse(payload.body))))
+      this.client.subscribe("/topic/game/pickups", (payload => this.updatePickups(JSON.parse(payload.body))))
+
     }
   }
 
   ngOnDestroy(): void {
     if (this.client.connected) {
-      //this.client.unsubscribe("/topic/chat")
+      this.client.unsubscribe("/topic/game/character")
+      this.client.unsubscribe("/topic/game/character_removal")
+      this.client.unsubscribe("/topic/game/pickups")
     }
   }
 
@@ -78,7 +83,6 @@ export class GameComponent implements OnInit, OnDestroy {
 
   updateCharacter(character : Character) {
     const characterIndexToUpdate  = this.characters.findIndex((char) => char.name === character.name);
-    console.log("Character update");
     if (characterIndexToUpdate === -1) {
       this.characters.push(character);
     } else {
@@ -90,4 +94,7 @@ export class GameComponent implements OnInit, OnDestroy {
     this.characters = this.characters.filter(char => char.name != character.name)
   }
 
+  private updatePickups(pickups: Pickup[]) {
+    this.pickups = pickups;
+  }
 }

@@ -1,5 +1,6 @@
 package com.baloise.collab.springbackend.game;
 
+import com.baloise.collab.springbackend.chat.ChatWebSocketHandler;
 import com.baloise.collab.springbackend.useradmin.UserDTO;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,7 @@ public class CharacterController {
     private final Set<Character> activeCharacters = new HashSet<>();
 
     private final SimpMessagingTemplate messageSender;
+    private final ChatWebSocketHandler chatWebSocketHandler;
 
     private final int spawnX = 0;
     private final int spawnY = 0;
@@ -66,6 +68,7 @@ public class CharacterController {
     private void sendRemoveCharacter(Character character) {
         CharacterDTO characterDTO = new CharacterDTO(character.getName(), character.getColor(), character.getPosXRounded(), character.getPosYRounded());
         messageSender.convertAndSend("/topic/game/character_removal", characterDTO);
+        chatWebSocketHandler.sendSystemChatMessage(character.getName() + " reached score: " + character.getScore());
     }
 
 }

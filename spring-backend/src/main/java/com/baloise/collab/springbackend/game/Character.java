@@ -17,6 +17,7 @@ public class Character {
     private long posX;
     private long posY;
     private Set<String> pressedKeys;
+    private int score;
 
     private final float speed = 0.1f;
 
