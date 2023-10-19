@@ -43,6 +43,7 @@ export class AppComponent implements OnDestroy {
       this.client.subscribe("/app/inventory", (payload => this.updateInventory(JSON.parse(payload.body))));
       this.client.subscribe("/topic/inventory", (payload => this.updateInventory(JSON.parse(payload.body))));
       this.client.subscribe("/topic/game/character", (payload => this.updateCharacter(JSON.parse(payload.body))))
+      this.client.subscribe("/topic/game/character_removal", (payload => this.removeCharacter(JSON.parse(payload.body))))
     };
 
     this.client.onWebSocketError = (error) => {
@@ -72,26 +73,6 @@ export class AppComponent implements OnDestroy {
       const payload = {posX: event.pageX, posY: event.pageY};
       this.client?.publish({destination: "/app/cursor", body: JSON.stringify(payload)});
     }
-  }
-
-  @HostListener('window:keyup', ['$event'])
-  keyEvent(event: KeyboardEvent) {
-    if(this.client.connected){
-      const keyCode = event.code
-      console.log("KeyEvent: " + keyCode);
-
-      if(keyCode === "KeyJ"){
-        console.log("Joining Game:");
-        const payload = "joining_game"
-        this.client?.publish({ destination: "/app/match_join", body: JSON.stringify(payload)});
-      } else if(keyCode === "ArrowLeft"
-          || keyCode === "ArrowRight"
-          || keyCode === "ArrowDown"
-          || keyCode === "ArrowUp") {
-        this.client?.publish({destination: "/app/game_control", body: JSON.stringify(keyCode)})
-      }
-    }
-
   }
 
   updateCursors(newPosition: Cursor) {
@@ -174,5 +155,9 @@ export class AppComponent implements OnDestroy {
     } else {
       this.characters[characterIndexToUpdate] = character;
     }
+  }
+
+  removeCharacter(character : Character) {
+      this.characters = this.characters.filter(char => char.name != character.name)
   }
 }

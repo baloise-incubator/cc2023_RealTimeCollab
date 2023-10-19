@@ -9,10 +9,11 @@ import { InventoryItemComponent } from './components/inventory-item/inventory-it
 import { ChatComponent } from './components/chat/chat.component';
 import { StockComponent } from './components/stock/stock.component';
 import { UserBarComponent } from './components/user-bar/user-bar.component';
+import { GameComponent } from './components/game/game.component';
 import { balIconAccount, balIconSend } from '@baloise/design-system-icons'
 
 @NgModule({
-  declarations: [AppComponent, CheckInComponent, InventoryComponent, InventoryItemComponent, ChatComponent, StockComponent, UserBarComponent],
+  declarations: [AppComponent, CheckInComponent, InventoryComponent, InventoryItemComponent, ChatComponent, GameComponent, StockComponent, UserBarComponent],
     imports: [
         BrowserModule,
         // Provide all components and value accessors to the app module.
