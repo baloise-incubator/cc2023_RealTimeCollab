@@ -4,6 +4,7 @@ on:
   push:
     branches: [ master ]
     paths: ['angular-frontend/**']
+  workflow_dispatch:
 
 jobs:
   docker:
