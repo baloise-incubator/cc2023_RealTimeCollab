@@ -1,13 +1,16 @@
 <bal-heading level="medium">Chat</bal-heading>
 
-<bal-stack layout="vertical" style="overflow-y: auto; height: 50vh;">
-    <bal-card flat *ngIf="!messages || messages.length === 0">
+<bal-stack layout="vertical" style="overflow-y: auto; height: 60vh;">
+    <bal-card flat border="true" space="small" *ngIf="!messages || messages.length === 0">
         <bal-card-subtitle>No message received!</bal-card-subtitle>
     </bal-card>
-    <bal-card flat *ngFor="let message of messages">
+    <bal-card flat border="true" space="small" *ngFor="let message of messages"
+        [ngClass]="{'is-align-self-flex-end': message.user.name === currentUser}">
         <bal-card-subtitle>
             {{ message.timestamp.toLocaleString() }}
-            <bal-tag class="ml-small" [color]="message.user.color">{{ message.user.name }}</bal-tag>
+            <bal-tag [color]="message.user.color" [light]="message.user.name === currentUser">
+                {{ message.user.name }}
+            </bal-tag>
         </bal-card-subtitle>
         <bal-card-content>{{ message.text }}</bal-card-content>
     </bal-card>
