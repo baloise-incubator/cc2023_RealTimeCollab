@@ -1,7 +1,7 @@
 export const environment = {
     production: true,
     backend: {
-        host: "ReplaceMeWithActualValue",
-        port: 80
+        host: "realtimecollab-frontend-test.apps.baloise.dev",
+        port: 443
     }
   };
