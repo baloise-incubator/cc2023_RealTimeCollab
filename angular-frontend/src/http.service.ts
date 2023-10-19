@@ -11,7 +11,7 @@ export class HttpService {
   }
 
   getWebSocket(credentials: Credentials): WebSocket {
-
+    console.log("Create web socket to: '" + this.host + ":" + this.port + "'");
     return new WebSocket(`ws://${credentials.username}:${credentials.passcode}@${this.host}:${this.port}/connect`);
   }
 }
