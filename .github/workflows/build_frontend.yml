@@ -11,7 +11,6 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
-
       - name: Build Angular App
         uses: actions/setup-node@v3
         with:
@@ -19,16 +18,13 @@ jobs:
           cache: 'npm'
         - run: npm ci
         - run: ng build
-
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
-
       - name: Login to DockerHub
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.CODECAMP23_USERNAME }}
           password: ${{ secrets.CODECAMP23_ACCESS_TOKEN }}
-          
       - name: Build and push
         id: docker_build
         uses: docker/build-push-action@v3
