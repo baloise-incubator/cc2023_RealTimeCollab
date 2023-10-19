@@ -1,10 +1,14 @@
 import { Credentials } from "./model";
+import { environment } from "./environments/environment";
 
 export class HttpService {
-  host = "localhost";
-  port = 8080;
+  host: String;
+  port: number;
 
-  constructor() {}
+  constructor() {
+    this.host = environment.backend.host;
+    this.port = environment.backend.port;
+  }
 
   getWebSocket(credentials: Credentials): WebSocket {
 
