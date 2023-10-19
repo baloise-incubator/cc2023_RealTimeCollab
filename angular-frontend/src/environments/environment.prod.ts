@@ -1,6 +1,7 @@
 export const environment = {
     production: true,
     backend: {
-        host: window.location.host
+        host: window.location.host,
+        protocol: "wss"
     }
   };
