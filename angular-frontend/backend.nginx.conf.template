@@ -18,12 +18,4 @@ server {
         gzip_types text/plain text/css application/json application/javascript application/x-javascript text/xml application/xml application/xml+rss text/javascript;
         gzip_comp_level 9;
     }
-
-    location /connect {
-        proxy_pass ${SPRING_BACKEND};
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection 'upgrade';
-        proxy_set_header Host $host;
-    }
 }
