@@ -1,6 +1,7 @@
 FROM nginx:stable
 
 COPY dist/angular-frontend /usr/share/nginx/html
-COPY nginx.conf  /etc/nginx/conf.d/default.conf
+RUN mkdir /etc/nginx/templates
+COPY nginx.conf  /etc/nginx/templates/default.conf.template
 
 EXPOSE 80
