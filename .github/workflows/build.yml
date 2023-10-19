@@ -1,8 +1,10 @@
-name: Docker CI
+name: Build Backend
 
 on:
   push:
     branches: [ master ]
+    paths: ['spring-backend/**']
+  workflow_dispatch:
 
 jobs:
   docker:
