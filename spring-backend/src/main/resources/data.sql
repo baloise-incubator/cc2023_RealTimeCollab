@@ -1,1 +1,1 @@
-INSERT INTO button (userName) VALUES ('Testing');
+INSERT INTO button (username) VALUES ('Testing');

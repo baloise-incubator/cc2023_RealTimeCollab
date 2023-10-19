@@ -14,6 +14,7 @@ public class ButtonMessageEntity {
     private long id;
 
     @Setter
+    @Column(name = "username")
     private String userName;
 
 }
