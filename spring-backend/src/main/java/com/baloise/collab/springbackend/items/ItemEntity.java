@@ -16,11 +16,14 @@ public class ItemEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @Column(nullable = true)
     private String userLock;
-
-    private String name;
 
     @ManyToOne
     @JoinColumn(name = "inventoryId")
     private InventoryEntity inventory;
+
+    @ManyToOne
+    @JoinColumn(name = "name")
+    private ItemBaseEntity itemBase;
 }

@@ -40,7 +40,7 @@ public class InventoriesWebSocketHandler {
                     inventory.getOwner(),
                     inventory.getItems().stream().map(item -> {
                         return new ItemDto(
-                                item.getName(),
+                                item.getItemBase().getName(),
                                 item.getId(),
                                 item.getUserLock()
                         );

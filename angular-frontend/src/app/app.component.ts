@@ -1,8 +1,19 @@
-import { Component, OnDestroy, HostListener } from '@angular/core';
+import {Component, OnDestroy, HostListener} from '@angular/core';
 import { Client } from '@stomp/stompjs';
-import {Button, Credentials, Cursor, Stock, User, Inventory, Character, Item} from "../model";
+import {
+  Credentials,
+  Cursor,
+  User,
+  Inventory,
+  Character,
+  Item,
+  ItemBase,
+  ItemLockMessage,
+  ItemTransferMessage
+} from "../model";
 import { HttpService } from 'src/http.service';
 import {CreateItemEvent} from "../events";
+import store from "../store";
 
 @Component({
   selector: 'app-root',
@@ -14,9 +25,16 @@ export class AppComponent implements OnDestroy {
   client: Client;
   httpService: HttpService;
   users: User[] = [];
-  currentUser = "";
   cursors: Cursor[] = [];
   inventories?: Inventory[];
+
+  get currentUser(): string {
+    return store.currentUser;
+  }
+
+  set currentUser(currentUser: string) {
+    store.currentUser = currentUser;
+  }
 
   constructor() {
     this.httpService = new HttpService();
@@ -29,7 +47,7 @@ export class AppComponent implements OnDestroy {
 
   openWebSocketConnection(credentials : Credentials) {
     this.client.configure({
-      debug: (msg) => console.log(msg),
+      debug: (msg) => console.debug(msg),
       webSocketFactory: () => this.httpService.getWebSocket(credentials)
      })
 
@@ -39,6 +57,8 @@ export class AppComponent implements OnDestroy {
       this.client.subscribe("/topic/cursor", (payload => this.updateCursors(JSON.parse(payload.body))));
       this.client.subscribe("/app/inventory", (payload => this.updateInventory(JSON.parse(payload.body))));
       this.client.subscribe("/topic/inventory", (payload => this.updateInventory(JSON.parse(payload.body))));
+      this.client.subscribe("/topic/itembases", (payload => this.updateItemBases(JSON.parse(payload.body))))
+      this.client.subscribe("/app/itembases", (payload => this.updateItemBases(JSON.parse(payload.body))))
     };
 
     this.client.onWebSocketError = (error) => {
@@ -118,10 +138,10 @@ export class AppComponent implements OnDestroy {
       return;
     }
 
-    var newExceptEx = newItems.filter(x => !exInventory.items!.find(y => x.id === y.id))
-    var exExceptNew = exInventory.items.filter(x => !newItems!.find(y => x.id === y.id))
-    var toUpdate = exInventory.items
-        .map(exItem => ({ exItem, newItem: newItems!.find(x => exInventory.id === x.id) }))
+    const newExceptEx = newItems.filter(x => !exInventory.items!.find(y => x.id === y.id))
+    const exExceptNew = exInventory.items.filter(x => !newItems!.find(y => x.id === y.id))
+    const toUpdate = exInventory.items
+        .map(exItem => ({ exItem, newItem: newItems!.find(x => exItem.id === x.id) }))
         .filter(x => !!x.newItem)
 
     for (const newItem of newExceptEx) {
@@ -132,6 +152,7 @@ export class AppComponent implements OnDestroy {
     }
     for (const items of toUpdate) {
       items.exItem.name = items.newItem!.name
+      items.exItem.userLock = items.newItem!.userLock;
     }
   }
 
@@ -142,4 +163,37 @@ export class AppComponent implements OnDestroy {
     });
   }
 
+  private updateItemBases(itemBase: ItemBase[]) {
+    store.itemBases = itemBase;
+  }
+
+  onHoverOverItem(item: Item) {
+    if (!item.userLock) {
+      this.client?.publish({
+        destination: "/app/itemlock", body: JSON.stringify({
+          id: item.id,
+          lock: true
+        } as ItemLockMessage)
+      });
+      console.log("lock pls")
+    }
+  }
+  onExitItem(item: Item) {
+    if (item.userLock === this.currentUser) {
+      this.client?.publish({
+        destination: "/app/itemlock", body: JSON.stringify({
+          id: item.id,
+          lock: false
+        } as ItemLockMessage)
+      });
+      console.log("unlock pls")
+    }
+  }
+
+  onItemMoved(event: ItemTransferMessage) {
+    console.log("moved");
+    this.client?.publish({
+      destination: "/app/itemtransfer", body: JSON.stringify(event)
+    });
+  }
 }
