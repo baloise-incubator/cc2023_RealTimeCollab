@@ -3,6 +3,7 @@ name: Build Frontend
 on:
   push:
     branches: [ master ]
+    paths: ['angular-frontend/**']
 
 jobs:
   docker:
@@ -27,7 +28,7 @@ jobs:
         with:
           username: ${{ secrets.CODECAMP23_USERNAME }}
           password: ${{ secrets.CODECAMP23_ACCESS_TOKEN }}
-
+          
       - name: Build and push
         id: docker_build
         uses: docker/build-push-action@v3
