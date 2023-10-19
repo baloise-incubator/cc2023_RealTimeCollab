@@ -38,12 +38,12 @@ export interface Character {
 }
 
 export interface Item {
-    uuid: string;
+    id: string;
     name: string;
 }
 
 export interface Inventory {
-    uuid: string;
+    id: string;
     owner?: string;
     items: Item[];
 }

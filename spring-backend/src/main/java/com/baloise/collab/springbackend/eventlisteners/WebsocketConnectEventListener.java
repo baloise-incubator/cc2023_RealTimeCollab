@@ -1,6 +1,6 @@
 package com.baloise.collab.springbackend.eventlisteners;
 
-import com.baloise.collab.springbackend.useradmin.ActiveUserAdministration;
+import com.baloise.collab.springbackend.items.InventoriesWebSocketHandler;
 import com.baloise.collab.springbackend.useradmin.ActiveUsersWebSocketHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
@@ -18,6 +18,7 @@ import java.util.*;
 public class WebsocketConnectEventListener implements ApplicationListener<SessionConnectedEvent> {
 
     private final ActiveUsersWebSocketHandler webSocketHandler;
+    private final InventoriesWebSocketHandler inventoriesWebSocketHandler;
 
     @Override
     @EventListener
@@ -26,6 +27,6 @@ public class WebsocketConnectEventListener implements ApplicationListener<Sessio
         var name = user.map(Principal::getName).orElse("Dummy");
         log.info(name + " has connected");
         webSocketHandler.addToActiveUsers(name);
-
+        inventoriesWebSocketHandler.handleInventoryCreation(name);
     }
 }

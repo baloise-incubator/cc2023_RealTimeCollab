@@ -1,5 +1,6 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {Inventory, Item} from "../../../model";
+import {Inventory} from "../../../model";
+import {CreateItemEvent} from "../../../events";
 
 @Component({
   selector: 'app-inventory',
@@ -14,20 +15,16 @@ export class InventoryComponent implements OnInit {
   @Output()
   moveRequested = new EventEmitter<string>
 
+  @Output()
+  itemCreated = new EventEmitter<CreateItemEvent>
+
   ngOnInit(): void {
     console.log(this.inventory)
   }
 
-  private insertItem(item: Item) {
-    this.inventory.items.push(item);
-  }
-
-  private removeItem(item: Item) {
-    this.inventory.items.splice(this.inventory.items.indexOf(item), 1);
-  }
-
-  temporarySpawn() {
-    this.insertItem({uuid: crypto.randomUUID(), name: 'gold'})
+  //todo: do propurle
+  temporaryCreate() {
+    this.itemCreated.emit({ name: 'gold' })
   }
 
   onDrop(event: DragEvent) {
