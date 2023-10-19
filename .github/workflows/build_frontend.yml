@@ -16,8 +16,10 @@ jobs:
         with:
           node-version: 18.x
           cache: 'npm'
-        - run: npm ci
-        - run: ng build
+      - name: Setup Angular Application
+        run: npm ci
+      - name: Build Angular Application
+        run: ng build
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
       - name: Login to DockerHub
