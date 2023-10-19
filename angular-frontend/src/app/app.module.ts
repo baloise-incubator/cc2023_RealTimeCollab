@@ -10,7 +10,7 @@ import { ChatComponent } from './components/chat/chat.component';
 import { StockComponent } from './components/stock/stock.component';
 import { UserBarComponent } from './components/user-bar/user-bar.component';
 import { GameComponent } from './components/game/game.component';
-import { balIconAccount, balIconSend } from '@baloise/design-system-icons'
+import { balIconAccount, balIconSend, balIconStarShape, balIconStarFull, balIconWeb, balIconX} from '@baloise/design-system-icons'
 
 @NgModule({
   declarations: [AppComponent, CheckInComponent, InventoryComponent, InventoryItemComponent, ChatComponent, GameComponent, StockComponent, UserBarComponent],
@@ -19,7 +19,7 @@ import { balIconAccount, balIconSend } from '@baloise/design-system-icons'
         // Provide all components and value accessors to the app module.
         BaloiseDesignSystemModule.forRoot({
             defaults: {
-                icons: { balIconAccount, balIconSend },
+                icons: { balIconAccount, balIconSend, balIconStarShape, balIconStarFull, balIconWeb, balIconX },
             },
         }),
         FormsModule,
