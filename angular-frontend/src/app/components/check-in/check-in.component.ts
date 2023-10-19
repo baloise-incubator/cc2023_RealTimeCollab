@@ -20,7 +20,6 @@ export class CheckInComponent {
 
     onCheckIn() {
         const payload = this.form.value as Credentials;
-        console.log(payload)
         this.onCheckin.emit(payload)
     }
 }
