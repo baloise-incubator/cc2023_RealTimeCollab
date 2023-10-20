@@ -1,36 +1,45 @@
 <bal-app class="has-sticky-footer" style="position: relative;" (mousemove)="mouseMoved($event)">
-  <bal-icon *ngFor="let cursor of cursors" name="edit" style="z-index: 1000; position: absolute;" [ngStyle]="{'top': cursor.posY + 'px', 'left': cursor.posX + 'px'}" [color]="cursor.color"></bal-icon>
-  <header>
-    <!-- Header content -->
-    <bal-navbar interface="simple" light="true" container="fluid">
-      <bal-navbar-brand logo="assets/logo.jpg">Dungeons & WebSockets • Treasure Chest</bal-navbar-brand>
-      <bal-navbar-menu>
-        <bal-navbar-menu-start></bal-navbar-menu-start>
-        <bal-navbar-menu-end>
-          <app-user-bar [users]="users"></app-user-bar>
-        </bal-navbar-menu-end>
-      </bal-navbar-menu>
-    </bal-navbar>
-  </header>
-  <main class="container is-fluid py-medium">
-    <!-- Your application content -->
-    <app-check-in *ngIf="!client.active" (onCheckin)="onConnectToBackend($event)"></app-check-in>
-    <bal-card *ngIf="client.active && !client.connected">
-      <bal-card-content class="is-flex is-align-items-center is-flex-direction-column is-justify-content-center">
-          <bal-spinner class="my-medium"></bal-spinner>
-          <bal-heading level="h5" space="all">Please wait...</bal-heading>
-      </bal-card-content>
-    </bal-card>
-    <div *ngIf="client.connected && inventories" class="columns">
-        <div class="column is-9">
-            <div class="inventories-container">
-                <app-inventory class="p-medium inventory-container" *ngFor="let inventory of inventories" [inventory]="inventory" (itemCreated)="onItemCreated($event, inventory)" (hoverOverItem)="onHoverOverItem($event)" (exitItem)="onExitItem($event)" (moveItem)="onItemMoved($event)"></app-inventory>
-            </div>
-            <app-game [client]="client" [currentUser]="currentUser"></app-game>
-        </div>
-        <div class="column is-3">
-            <app-chat [client]="client" [currentUser]="currentUser"></app-chat>
-        </div>
+    <div>
+        <bal-text class="has-text-shadow" *ngFor="let cursor of cursors" style="z-index: 1100; position: absolute;"
+                   [ngStyle]="{'top': cursor.posY + 'px', 'left': cursor.posX + 25 + 'px'}"
+                   [color]="cursor.color">{{cursor.name}}</bal-text>
+        <bal-icon *ngFor="let cursor of cursors" name="edit" style="z-index: 1000; position: absolute;"
+                  [ngStyle]="{'top': cursor.posY + 'px', 'left': cursor.posX + 'px'}" [color]="cursor.color"></bal-icon>
     </div>
-  </main>
+    <header>
+        <!-- Header content -->
+        <bal-navbar interface="simple" light="true" container="fluid">
+            <bal-navbar-brand logo="assets/logo.jpg">Dungeons & WebSockets • Treasure Chest</bal-navbar-brand>
+            <bal-navbar-menu>
+                <bal-navbar-menu-start></bal-navbar-menu-start>
+                <bal-navbar-menu-end>
+                    <app-user-bar [users]="users"></app-user-bar>
+                </bal-navbar-menu-end>
+            </bal-navbar-menu>
+        </bal-navbar>
+    </header>
+    <main class="container is-fluid py-medium">
+        <!-- Your application content -->
+        <app-check-in *ngIf="!client.active" (onCheckin)="onConnectToBackend($event)"></app-check-in>
+        <bal-card *ngIf="client.active && !client.connected">
+            <bal-card-content class="is-flex is-align-items-center is-flex-direction-column is-justify-content-center">
+                <bal-spinner class="my-medium"></bal-spinner>
+                <bal-heading level="h5" space="all">Please wait...</bal-heading>
+            </bal-card-content>
+        </bal-card>
+        <div *ngIf="client.connected && inventories" class="columns">
+            <div class="column is-9">
+                <div class="inventories-container">
+                    <app-inventory class="p-medium inventory-container" *ngFor="let inventory of inventories"
+                                   [inventory]="inventory" (itemCreated)="onItemCreated($event, inventory)"
+                                   (hoverOverItem)="onHoverOverItem($event)" (exitItem)="onExitItem($event)"
+                                   (moveItem)="onItemMoved($event)"></app-inventory>
+                </div>
+                <app-game [client]="client" [currentUser]="currentUser"></app-game>
+            </div>
+            <div class="column is-3">
+                <app-chat [client]="client" [currentUser]="currentUser"></app-chat>
+            </div>
+        </div>
+    </main>
 </bal-app>
