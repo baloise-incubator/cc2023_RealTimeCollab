@@ -49,6 +49,7 @@ public class ItemsWebSocketHandler {
         String userName = optionalToken.map(AbstractAuthenticationToken::getName).orElse("dummyUser");
         if (dto.lock()) {
             if (item.getUserLock() == null) {
+                resetUserLocks(userName);
                 item.setUserLock(userName);
                 itemsRepository.save(item);
                 notifyInventoryChange();
@@ -60,6 +61,14 @@ public class ItemsWebSocketHandler {
                 notifyInventoryChange();
             }
         }
+    }
+
+    private void resetUserLocks(String userName) {
+        var entities = itemsRepository.findByUserLock(userName);
+        for (var entity : entities) {
+            entity.setUserLock(null);
+        }
+        itemsRepository.saveAll(entities);
     }
 
     @MessageMapping("/itemtransfer")
