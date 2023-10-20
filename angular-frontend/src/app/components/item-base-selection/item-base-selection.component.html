@@ -1,0 +1,8 @@
+<div class="item-base-container">
+    <div *ngFor="let base of itemBases" class="item-base-group" (click)="onItemClicked(base)">
+        <div class="item-base">
+            <img [alt]="base.label" [src]="'assets/items/' + base.name + '.png'"/>
+        </div>
+        <div class="item-base-label">{{base.label}}</div>
+    </div>
+</div>

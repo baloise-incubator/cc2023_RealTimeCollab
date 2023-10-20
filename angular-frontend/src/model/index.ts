@@ -45,12 +45,13 @@ export interface Pickup {
 }
 
 export interface Item {
-    id: string;
+    userLock: string;
+    id: number;
     name: string;
 }
 
 export interface Inventory {
-    id: string;
+    id: number;
     owner?: string;
     items: Item[];
 }
@@ -59,4 +60,19 @@ export interface ChatMessage {
     user: User,
     text: string,
     timestamp: Date
+}
+
+export interface ItemBase {
+    name: string;
+    label: string;
+}
+
+export interface ItemLockMessage {
+    id: number,
+    lock: boolean
+}
+
+export interface ItemTransferMessage {
+    id: number,
+    targetInventoryId: number
 }

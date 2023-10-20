@@ -23,7 +23,9 @@
     </bal-card>
     <div *ngIf="client.connected && inventories" class="columns">
         <div class="column is-9">
-            <app-inventory *ngFor="let inventory of inventories" [inventory]="inventory" (itemCreated)="onItemCreated($event, inventory)"></app-inventory>
+            <div class="inventories-container">
+                <app-inventory class="p-medium inventory-container" *ngFor="let inventory of inventories" [inventory]="inventory" (itemCreated)="onItemCreated($event, inventory)" (hoverOverItem)="onHoverOverItem($event)" (exitItem)="onExitItem($event)" (moveItem)="onItemMoved($event)"></app-inventory>
+            </div>
             <app-game [client]="client" [currentUser]="currentUser"></app-game>
         </div>
         <div class="column is-3">
