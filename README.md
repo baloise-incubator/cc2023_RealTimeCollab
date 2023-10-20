@@ -6,3 +6,6 @@ We aim to create an application which allows for realtime collaborative work for
 More Details TBD.
 
 https://www.adesso.de/de/news/blog/websockets-leichtgemacht-mit-stomp-js-und-spring-boot.jsp
+
+The latest version of the app can be tested here:
+https://realtimecollab-test.apps.baloise.dev/
