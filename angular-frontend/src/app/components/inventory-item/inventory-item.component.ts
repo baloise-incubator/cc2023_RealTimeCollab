@@ -14,6 +14,8 @@ export class InventoryItemComponent implements OnInit {
     return store.currentUser;
   }
 
+
+
   onDragStart(event: DragEvent) {
     if (this.item.userLock !== this.currentUser) {
       console.warn("EEEEEEEEEEEEEEEEEEEEEEEE!!!")
@@ -26,4 +28,6 @@ export class InventoryItemComponent implements OnInit {
   ngOnInit(): void {
     console.log("hey?")
   }
+
+  protected readonly store = store;
 }

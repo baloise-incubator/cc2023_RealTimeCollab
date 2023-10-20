@@ -1,3 +1,4 @@
-<div class="inventory-item" [ngClass]="item.userLock ? 'locked-item' : ''" [draggable]="item.userLock === currentUser" (dragstart)="onDragStart($event)">
+<div class="inventory-item" [ngClass]="item.userLock ? store.getColorForUserName(item.userLock): ''"
+     [draggable]="item.userLock === currentUser" (dragstart)="onDragStart($event)">
     <img [alt]="item" [src]="'assets/items/' + item.name + '.png'"/>
 </div>

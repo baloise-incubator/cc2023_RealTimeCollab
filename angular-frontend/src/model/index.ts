@@ -76,3 +76,8 @@ export interface ItemTransferMessage {
     id: number,
     targetInventoryId: number
 }
+
+export interface UserColor {
+    name: string;
+    color: string;
+}

@@ -9,7 +9,7 @@ import {
   Item,
   ItemBase,
   ItemLockMessage,
-  ItemTransferMessage
+  ItemTransferMessage, UserColor
 } from "../model";
 import { HttpService } from 'src/http.service';
 import {CreateItemEvent} from "../events";
@@ -105,6 +105,12 @@ export class AppComponent implements OnDestroy {
 
   updateUsers(users: User[]) {
     this.users = users;
+
+    users.map(user => {
+      const userColor : UserColor = {name : user.name, color : user.color}
+      return userColor
+    }).forEach(userColor => store.setUserColor(userColor))
+
     this.cursors = this.cursors.filter(cursor => users.find(user => user.name === cursor.name));
   }
 
