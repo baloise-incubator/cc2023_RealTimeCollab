@@ -5,6 +5,10 @@
                    [color]="cursor.color">{{cursor.name}}</bal-text>
         <bal-icon *ngFor="let cursor of cursors" name="edit" style="z-index: 1000; position: absolute;"
                   [ngStyle]="{'top': cursor.posY + 'px', 'left': cursor.posX + 'px'}" [color]="cursor.color"></bal-icon>
+
+        <bal-icon *ngFor="let draggedItem of draggedItems" name="edit" style="z-index: 1200; position: absolute;"
+                  [ngStyle]="{'top': draggedItem.posY + 'px', 'left': draggedItem.posX + 'px'}"></bal-icon>
+
     </div>
     <header>
         <!-- Header content -->
@@ -31,7 +35,7 @@
             <div class="column is-9">
                 <div class="inventories-container">
                     <app-inventory class="p-medium inventory-container" *ngFor="let inventory of inventories"
-                                   [inventory]="inventory" (itemCreated)="onItemCreated($event, inventory)"
+                                   [inventory]="inventory" [client]="client" (itemCreated)="onItemCreated($event, inventory)"
                                    (hoverOverItem)="onHoverOverItem($event)" (exitItem)="onExitItem($event)"
                                    (moveItem)="onItemMoved($event)"></app-inventory>
                 </div>

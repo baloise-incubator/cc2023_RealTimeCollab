@@ -81,3 +81,11 @@ export interface UserColor {
     name: string;
     color: string;
 }
+
+export interface ItemDragInfo {
+    name: string;
+    id : number;
+    posX: number;
+    posY: number;
+    finished : boolean;
+}

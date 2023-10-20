@@ -3,8 +3,8 @@
         Inventory {{inventory.owner}}
     </bal-card-title>
     <bal-card-content>
-        <div class="inventory-grid" (dragenter)="onDragEnter()">
-            <app-inventory-item [item]="item" (mouseenter)="onHoverOverItem(item)" (mouseleave)="onExitItem(item)" *ngFor="let item of inventory.items"></app-inventory-item>
+        <div class="inventory-grid" (drop)="onDrop($event)" (dragenter)="onDragEnter($event)" (dragover)="onDragOver($event)">
+            <app-inventory-item [item]="item" [client]="client" (mouseenter)="onHoverOverItem(item)" (mouseleave)="onExitItem(item)" *ngFor="let item of inventory.items"></app-inventory-item>
             <div class="inventory-add-button">
                 <bal-button square="" inverted="" icon="plus" (click)="onCreateNew()"></bal-button>
             </div>

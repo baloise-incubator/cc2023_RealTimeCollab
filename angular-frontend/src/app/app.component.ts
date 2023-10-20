@@ -5,11 +5,12 @@ import {
   Cursor,
   User,
   Inventory,
-  Character,
   Item,
   ItemBase,
   ItemLockMessage,
-  ItemTransferMessage, UserColor
+  ItemTransferMessage,
+  UserColor,
+  ItemDragInfo
 } from "../model";
 import { HttpService } from 'src/http.service';
 import {CreateItemEvent} from "../events";
@@ -27,6 +28,7 @@ export class AppComponent implements OnDestroy {
   users: User[] = [];
   cursors: Cursor[] = [];
   inventories?: Inventory[];
+  draggedItems : ItemDragInfo[] = [];
 
   get currentUser(): string {
     return store.currentUser;
@@ -57,8 +59,9 @@ export class AppComponent implements OnDestroy {
       this.client.subscribe("/topic/cursor", (payload => this.updateCursors(JSON.parse(payload.body))));
       this.client.subscribe("/app/inventory", (payload => this.updateInventory(JSON.parse(payload.body))));
       this.client.subscribe("/topic/inventory", (payload => this.updateInventory(JSON.parse(payload.body))));
-      this.client.subscribe("/topic/itembases", (payload => this.updateItemBases(JSON.parse(payload.body))))
-      this.client.subscribe("/app/itembases", (payload => this.updateItemBases(JSON.parse(payload.body))))
+      this.client.subscribe("/topic/itembases", (payload => this.updateItemBases(JSON.parse(payload.body))));
+      this.client.subscribe("/app/itembases", (payload => this.updateItemBases(JSON.parse(payload.body))));
+      this.client.subscribe("/topic/itemdrag", (payload => this.updateDraggedItems(JSON.parse(payload.body))));
     };
 
     this.client.onWebSocketError = (error) => {
@@ -115,7 +118,6 @@ export class AppComponent implements OnDestroy {
   }
 
   private updateInventory(inventories: Inventory[]) {
-    console.log("inventory update", inventories)
     if (!this.inventories) {
       this.inventories = inventories;
       return;
@@ -199,4 +201,21 @@ export class AppComponent implements OnDestroy {
       destination: "/app/itemtransfer", body: JSON.stringify(event)
     });
   }
+
+  private updateDraggedItems(itemDrag: ItemDragInfo) {
+    console.log("Dragging received" + itemDrag.id)
+    const index = this.draggedItems.findIndex(item => item.id === itemDrag.id)
+    if(index >= 0){
+      if(itemDrag.finished){
+        this.draggedItems.splice(index, 1);
+      } else {
+        this.draggedItems[index] = itemDrag;
+      }
+    } else {
+      if(!itemDrag.finished){
+        this.draggedItems.push(itemDrag);
+      }
+    }
+  }
+
 }
