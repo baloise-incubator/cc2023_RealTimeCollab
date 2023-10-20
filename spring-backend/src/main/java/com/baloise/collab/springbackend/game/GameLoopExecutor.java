@@ -40,7 +40,7 @@ public class GameLoopExecutor {
     public void quit(){
         running = false;
         lastFrameTime = 0L;
-
+        pickUpHandler.clearPickupsAndSendToClients();
     }
 
 
