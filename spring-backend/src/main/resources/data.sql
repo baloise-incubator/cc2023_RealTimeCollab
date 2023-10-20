@@ -5,3 +5,5 @@ INSERT INTO item_base (name, label) VALUES ('longsword', 'Langschwert');
 INSERT INTO item_base (name, label) VALUES ('shield', 'Schild');
 INSERT INTO item_base (name, label) VALUES ('diamond', 'Diamant');
 INSERT INTO item_base (name, label) VALUES ('health_potion', 'Lebenstrank');
+INSERT INTO item_base (name, label) VALUES ('gold_bar', 'Goldbarren');
+INSERT INTO item_base (name, label) VALUES ('bal', 'Artefakt');
