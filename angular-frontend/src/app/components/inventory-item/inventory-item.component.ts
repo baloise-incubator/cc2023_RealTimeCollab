@@ -15,6 +15,10 @@ export class InventoryItemComponent implements OnInit {
   }
 
   onDragStart(event: DragEvent) {
+    if (this.item.userLock !== this.currentUser) {
+      console.warn("EEEEEEEEEEEEEEEEEEEEEEEE!!!")
+      event.preventDefault();
+    }
     event.dataTransfer?.clearData()
     event.dataTransfer?.setData("application/json", JSON.stringify(this.item))
   }
