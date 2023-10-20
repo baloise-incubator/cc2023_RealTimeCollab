@@ -1,11 +1,12 @@
-import { Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { FormControl, FormGroup} from "@angular/forms";
-import { BalButton, BalIcon, BalInput } from '@baloise/design-system-components-angular';
-
-import { BalValidators } from "@baloise/web-app-validators-angular";
+import { Component, ElementRef, Input, OnDestroy, OnInit, Pipe, PipeTransform, ViewChild } from '@angular/core';
 
 import { Client } from '@stomp/stompjs';
-import { ChatMessage } from 'src/model';
+import { ChatMessage, User } from 'src/model';
+
+interface MessageGroup {
+  user: User,
+  messages: ChatMessage[]
+}
 
 @Component({
   selector: 'app-chat',
@@ -18,8 +19,8 @@ export class ChatComponent implements OnInit, OnDestroy {
   @Input() currentUser!: String;
 
   @ViewChild("chatMessageBox") chatMessageBox!: ElementRef;
-
-  messages: ChatMessage[] = [];
+  
+  messages: MessageGroup[] = [];
   messageText = "";
 
   ngOnInit(): void {
@@ -37,7 +38,14 @@ export class ChatComponent implements OnInit, OnDestroy {
   addMessage(payload: any) {
     const newMessage = JSON.parse(payload.body) as ChatMessage;
     newMessage.timestamp = new Date(newMessage.timestamp);
-    this.messages.push(newMessage);
+
+    const lastMessageGroup = this.messages[this.messages.length - 1];
+
+    if (!!lastMessageGroup && lastMessageGroup.user.name === newMessage.user.name) {
+      lastMessageGroup.messages.push(newMessage);
+    } else {
+      this.messages.push({user: newMessage.user, messages: [newMessage]});
+    }
   }
 
   sendMessage() {
