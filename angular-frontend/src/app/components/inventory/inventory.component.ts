@@ -26,6 +26,8 @@ export class InventoryComponent implements OnInit {
   @Output()
   moveItem = new EventEmitter<ItemTransferMessage>
 
+  dropzone: boolean = false;
+
   constructor(private modalService: BalModalService) {}
 
   ngOnInit(): void {
@@ -49,24 +51,35 @@ export class InventoryComponent implements OnInit {
     this.itemCreated.emit({ name: base.name })
   }
 
-  onDrop(event: DragEvent) {
-    if (event.dataTransfer) {
-      const data = JSON.parse(event.dataTransfer.getData("application/json")) as Item
+  onDropzoneDrop(event: DragEvent) {
+    const data = this.getItemFromEvent(event)
+    if (data) {
       this.moveItem.emit({
         id: data.id,
         targetInventoryId: this.inventory.id
       })
     }
+    this.dropzone = false;
   }
 
-  onDragOver(event: DragEvent) {
-    event.preventDefault();
-    console.log("over");
+  private getItemFromEvent(event: DragEvent): Item | undefined {
+    if (!event.dataTransfer) {
+      return undefined;
+    }
+    return JSON.parse(event.dataTransfer.getData("application/json")) as Item;
   }
 
-  onDragEnter(event: DragEvent) {
+  onDropzoneDragOver(event: DragEvent) {
     event.preventDefault();
-    console.log("enter");
+  }
+
+  onDropzoneDragEnter(event: DragEvent) {
+    event.preventDefault();
+  }
+
+  onDragEnter() {
+    this.dropzone = true;
+    console.log("dzone")
   }
 
   onHoverOverItem(item: Item) {
@@ -75,5 +88,11 @@ export class InventoryComponent implements OnInit {
 
   onExitItem(item: Item) {
     this.exitItem.emit(item)
+  }
+
+  onDragLeave(event: DragEvent) {
+    event.preventDefault();
+    this.dropzone = false;
+    console.log("no dzone");
   }
 }

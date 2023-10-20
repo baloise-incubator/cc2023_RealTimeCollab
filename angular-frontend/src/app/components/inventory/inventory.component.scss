@@ -1,6 +1,7 @@
 .inventory-grid {
   display:flex;
   flex-wrap: wrap;
+  position:relative;
 }
 .inventory {
 }
@@ -14,4 +15,15 @@
   display:flex;
   justify-content: center;
   align-items: center;
+}
+.dropzone {
+  position:absolute;
+  width:100%;
+  height:100%;
+  background-color: rgba(0, 0, 0, 0.1);
+  border-width: 2px;
+  border-style:dashed;
+  border-radius:9px;
+  border-color:gray;
+
 }
