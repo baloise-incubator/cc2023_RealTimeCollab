@@ -185,15 +185,12 @@ export class AppComponent implements OnDestroy {
     }
   }
   onExitItem(item: Item) {
-    if (item.userLock === this.currentUser) {
       this.client?.publish({
         destination: "/app/itemlock", body: JSON.stringify({
           id: item.id,
           lock: false
         } as ItemLockMessage)
       });
-      console.log("unlock pls")
-    }
   }
 
   onItemMoved(event: ItemTransferMessage) {
