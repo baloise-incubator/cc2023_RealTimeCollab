@@ -8,7 +8,7 @@
         [ngClass]="{'is-align-self-flex-end': message.user.name === currentUser}">
         <bal-card-subtitle>
             {{ message.timestamp.toLocaleString() }}
-            <bal-tag [color]="message.user.color" [light]="message.user.name === currentUser">
+            <bal-tag [color]="message.user.color" [light]="message.user.name === currentUser" class="ml-small">
                 {{ message.user.name }}
             </bal-tag>
         </bal-card-subtitle>

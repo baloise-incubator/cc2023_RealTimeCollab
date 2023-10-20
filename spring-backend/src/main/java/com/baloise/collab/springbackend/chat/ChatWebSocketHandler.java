@@ -40,7 +40,7 @@ public class ChatWebSocketHandler {
 
     public void sendSystemChatMessage(String chatMessage) {
         var systemUserDTO = new UserDTO("System", "danger");
-        var message = new OutgoingChatMessageDTO(chatMessage, systemUserDTO, new Date().toString());
+        var message = new OutgoingChatMessageDTO(chatMessage, systemUserDTO, new Date());
         messagingTemplate.convertAndSend("/topic/chat", message);
     }
 

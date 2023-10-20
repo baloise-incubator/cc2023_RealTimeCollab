@@ -37,7 +37,6 @@ export class ChatComponent implements OnInit, OnDestroy {
   addMessage(payload: any) {
     const newMessage = JSON.parse(payload.body) as ChatMessage;
     newMessage.timestamp = new Date(newMessage.timestamp);
-    console.log(newMessage);
     this.messages.push(newMessage);
   }
 
@@ -45,7 +44,6 @@ export class ChatComponent implements OnInit, OnDestroy {
     const text = this.messageText
     if (text !== "") {
       const payload = JSON.stringify({text: text, clientTimestamp: new Date()});
-      console.log(payload);
       this.client.publish({destination: "/app/chat", body: payload});
       this.messageText = "";
       this.chatMessageBox.nativeElement.focus();
