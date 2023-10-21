@@ -1,4 +1,4 @@
-import {Component, OnDestroy, HostListener} from '@angular/core';
+import {Component, OnDestroy, HostListener, Injectable} from '@angular/core';
 import { Client } from '@stomp/stompjs';
 import {
   Credentials,
@@ -15,12 +15,14 @@ import {
 import { HttpService } from 'src/http.service';
 import {CreateItemEvent} from "../events";
 import store from "../store";
+import {HttpClient} from "@angular/common/http";
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
+@Injectable()
 export class AppComponent implements OnDestroy {
 
   client: Client;
@@ -38,13 +40,30 @@ export class AppComponent implements OnDestroy {
     store.currentUser = currentUser;
   }
 
-  constructor() {
-    this.httpService = new HttpService();
+  constructor(private http: HttpClient) {
+    this.httpService = new HttpService(http);
     this.client = new Client();
   }
 
   ngOnDestroy(): void {
     this.closeWebSocketConnection();
+  }
+
+  onConnectToBackend(credentials: Credentials) {
+    this.httpService.getRegistrationURL(credentials)
+        .subscribe(isValid => {
+          if (isValid) {
+            console.log("registered user")
+            sessionStorage.setItem(
+                'token',
+                btoa(credentials.username + ':' + credentials.password))
+            this.openWebSocketConnection(credentials)
+            this.currentUser = credentials.username;
+          } else {
+            console.log("registering user failed")
+            alert("Authentication failed.")
+          }
+        })
   }
 
   openWebSocketConnection(credentials : Credentials) {
@@ -79,11 +98,6 @@ export class AppComponent implements OnDestroy {
     if (this.client) {
       this.client.deactivate();
     }
-  }
-
-  onConnectToBackend(credentials: Credentials) {
-    this.openWebSocketConnection(credentials);
-    this.currentUser = credentials.username;
   }
 
   mouseMoved(event: MouseEvent) {

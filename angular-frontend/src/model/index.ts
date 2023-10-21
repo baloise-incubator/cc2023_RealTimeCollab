@@ -15,7 +15,7 @@ export interface Button {
 
 export interface Credentials {
     username: string
-    passcode: string
+    password: string
 }
 
 export interface User {

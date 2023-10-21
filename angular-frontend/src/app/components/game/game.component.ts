@@ -58,6 +58,7 @@ export class GameComponent implements OnInit, OnDestroy {
           || keyCode === "ArrowRight"
           || keyCode === "ArrowDown"
           || keyCode === "ArrowUp") {
+        event.preventDefault();
         const payload = {keyCode : keyCode, pressed : false}
         this.client?.publish({destination: "/app/game/character_control", body: JSON.stringify(payload)})
       }
@@ -74,6 +75,7 @@ export class GameComponent implements OnInit, OnDestroy {
           || keyCode === "ArrowRight"
           || keyCode === "ArrowDown"
           || keyCode === "ArrowUp") {
+        event.preventDefault();
         const payload = {keyCode : keyCode, pressed : true}
         this.client?.publish({destination: "/app/game/character_control", body: JSON.stringify(payload)})
       }

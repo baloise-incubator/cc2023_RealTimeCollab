@@ -12,11 +12,13 @@ import { UserBarComponent } from './components/user-bar/user-bar.component';
 import { GameComponent } from './components/game/game.component';
 import { balIconAccount, balIconSend, balIconStarShape, balIconStarFull, balIconWeb, balIconX} from '@baloise/design-system-icons'
 import { ItemBaseSelectionComponent } from './components/item-base-selection/item-base-selection.component'
+import {HttpClientModule} from "@angular/common/http";
 
 @NgModule({
   declarations: [AppComponent, CheckInComponent, InventoryComponent, InventoryItemComponent, ChatComponent, GameComponent, StockComponent, UserBarComponent, ItemBaseSelectionComponent],
     imports: [
         BrowserModule,
+        HttpClientModule,
         // Provide all components and value accessors to the app module.
         BaloiseDesignSystemModule.forRoot({
             defaults: {
