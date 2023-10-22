@@ -1,6 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {Item} from "../../../model";
+import {Item, ItemDragInfo} from "../../../model";
 import store from "../../../store";
+import {Client} from "@stomp/stompjs/esm6";
 
 @Component({
   selector: 'app-inventory-item',
@@ -10,6 +11,9 @@ import store from "../../../store";
 export class InventoryItemComponent implements OnInit {
   @Input()
   item!: Item
+
+  @Input() client!: Client;
+
   get currentUser(): string {
     return store.currentUser;
   }
@@ -24,6 +28,32 @@ export class InventoryItemComponent implements OnInit {
     event.dataTransfer?.clearData()
     event.dataTransfer?.setData("application/json", JSON.stringify(this.item))
   }
+
+  onDragging(event : DragEvent) {
+    this.sendDragInfo(event, false)
+  }
+
+  onDragEnd(event : DragEvent) {
+    this.sendDragInfo(event, true)
+  }
+
+  sendDragInfo(event : DragEvent, finished : boolean) {
+    if (this.item.userLock !== this.currentUser) {
+      console.warn("Nein -doch - oohhhhhh")
+    } else {
+      const itemDragInfo : ItemDragInfo = {
+        name : this.item.name,
+        posX: event.pageX,
+        posY : event.pageY,
+        id:this.item.id,
+        draggingPlayer: this.item.userLock,
+        finished: finished
+      }
+      this.client?.publish({destination: "/app/item-dragging", body: JSON.stringify(itemDragInfo)
+      });
+    }
+  }
+
 
   ngOnInit(): void {
     console.log("hey?")

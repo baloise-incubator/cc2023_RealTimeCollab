@@ -29,6 +29,8 @@ public class GameLoopExecutor {
                     var scoreUpdate = pickUpHandler.collectPickups(character);
                     character.setScore(character.getScore() + scoreUpdate);
                 });
+            } else {
+                quit();
             }
             pickUpHandler.spawnPickupsAndSendToClients();
             lastFrameTime = System.currentTimeMillis();

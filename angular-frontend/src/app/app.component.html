@@ -1,4 +1,8 @@
-<bal-app class="has-sticky-footer" style="position: relative;" (mousemove)="mouseMoved($event)">
+<bal-app class="has-sticky-footer" style="position: relative;" (pointermove)="pointerMoved($event)">
+    <div>
+        <app-dragged-item *ngFor="let draggedItem of draggedItems" style="z-index: 1200; position: absolute;"
+                          [itemDragInfo]="draggedItem" [ngStyle]="{'top': draggedItem.posY + 'px', 'left': draggedItem.posX + 'px'}"></app-dragged-item>
+    </div>
     <div>
         <bal-text class="has-text-shadow" *ngFor="let cursor of cursors" style="z-index: 1100; position: absolute;"
                    [ngStyle]="{'top': cursor.posY + 'px', 'left': cursor.posX + 25 + 'px'}"
@@ -31,7 +35,7 @@
             <div class="column is-9">
                 <div class="inventories-container">
                     <app-inventory class="p-medium inventory-container" *ngFor="let inventory of inventories"
-                                   [inventory]="inventory" (itemCreated)="onItemCreated($event, inventory)"
+                                   [inventory]="inventory" [client]="client" (itemCreated)="onItemCreated($event, inventory)"
                                    (hoverOverItem)="onHoverOverItem($event)" (exitItem)="onExitItem($event)"
                                    (moveItem)="onItemMoved($event)"></app-inventory>
                 </div>

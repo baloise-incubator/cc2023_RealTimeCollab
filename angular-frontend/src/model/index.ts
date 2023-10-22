@@ -15,7 +15,7 @@ export interface Button {
 
 export interface Credentials {
     username: string
-    passcode: string
+    password: string
 }
 
 export interface User {
@@ -80,4 +80,13 @@ export interface ItemTransferMessage {
 export interface UserColor {
     name: string;
     color: string;
+}
+
+export interface ItemDragInfo {
+    name: string;
+    id : number;
+    posX: number;
+    posY: number;
+    finished : boolean;
+    draggingPlayer : string;
 }

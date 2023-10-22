@@ -3,6 +3,7 @@ import {Inventory, Item, ItemBase, ItemTransferMessage} from "../../../model";
 import {CreateItemEvent} from "../../../events";
 import {BalModalService} from "@baloise/design-system-components-angular";
 import {ItemBaseSelectionComponent} from "../item-base-selection/item-base-selection.component";
+import {Client} from "@stomp/stompjs";
 
 @Component({
   selector: 'app-inventory',
@@ -13,6 +14,9 @@ export class InventoryComponent implements OnInit {
 
   @Input()
   inventory!: Inventory
+
+  @Input()
+  client!: Client
 
   @Output()
   itemCreated = new EventEmitter<CreateItemEvent>

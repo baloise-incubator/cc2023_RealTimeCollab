@@ -15,7 +15,7 @@ export class CheckInComponent {
 
     form = new FormGroup({
         username: new FormControl("", BalValidators.isRequired()),
-        passcode: new FormControl("", BalValidators.isRequired())
+        password: new FormControl("", BalValidators.isRequired())
     });
 
     onCheckIn() {

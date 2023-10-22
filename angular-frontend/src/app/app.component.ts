@@ -1,25 +1,28 @@
-import {Component, OnDestroy, HostListener} from '@angular/core';
+import {Component, OnDestroy, HostListener, Injectable} from '@angular/core';
 import { Client } from '@stomp/stompjs';
 import {
   Credentials,
   Cursor,
   User,
   Inventory,
-  Character,
   Item,
   ItemBase,
   ItemLockMessage,
-  ItemTransferMessage, UserColor
+  ItemTransferMessage,
+  UserColor,
+  ItemDragInfo
 } from "../model";
 import { HttpService } from 'src/http.service';
 import {CreateItemEvent} from "../events";
 import store from "../store";
+import {HttpClient} from "@angular/common/http";
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
+@Injectable()
 export class AppComponent implements OnDestroy {
 
   client: Client;
@@ -27,6 +30,7 @@ export class AppComponent implements OnDestroy {
   users: User[] = [];
   cursors: Cursor[] = [];
   inventories?: Inventory[];
+  draggedItems : ItemDragInfo[] = [];
 
   get currentUser(): string {
     return store.currentUser;
@@ -36,13 +40,30 @@ export class AppComponent implements OnDestroy {
     store.currentUser = currentUser;
   }
 
-  constructor() {
-    this.httpService = new HttpService();
+  constructor(private http: HttpClient) {
+    this.httpService = new HttpService(http);
     this.client = new Client();
   }
 
   ngOnDestroy(): void {
     this.closeWebSocketConnection();
+  }
+
+  onConnectToBackend(credentials: Credentials) {
+    this.httpService.getRegistrationURL(credentials)
+        .subscribe(isValid => {
+          if (isValid) {
+            console.log("registered user")
+            sessionStorage.setItem(
+                'token',
+                btoa(credentials.username + ':' + credentials.password))
+            this.openWebSocketConnection(credentials)
+            this.currentUser = credentials.username;
+          } else {
+            console.log("registering user failed")
+            alert("Authentication failed.")
+          }
+        })
   }
 
   openWebSocketConnection(credentials : Credentials) {
@@ -57,8 +78,9 @@ export class AppComponent implements OnDestroy {
       this.client.subscribe("/topic/cursor", (payload => this.updateCursors(JSON.parse(payload.body))));
       this.client.subscribe("/app/inventory", (payload => this.updateInventory(JSON.parse(payload.body))));
       this.client.subscribe("/topic/inventory", (payload => this.updateInventory(JSON.parse(payload.body))));
-      this.client.subscribe("/topic/itembases", (payload => this.updateItemBases(JSON.parse(payload.body))))
-      this.client.subscribe("/app/itembases", (payload => this.updateItemBases(JSON.parse(payload.body))))
+      this.client.subscribe("/topic/itembases", (payload => this.updateItemBases(JSON.parse(payload.body))));
+      this.client.subscribe("/app/itembases", (payload => this.updateItemBases(JSON.parse(payload.body))));
+      this.client.subscribe("/topic/itemdrag", (payload => this.updateDraggedItems(JSON.parse(payload.body))));
     };
 
     this.client.onWebSocketError = (error) => {
@@ -78,12 +100,7 @@ export class AppComponent implements OnDestroy {
     }
   }
 
-  onConnectToBackend(credentials: Credentials) {
-    this.openWebSocketConnection(credentials);
-    this.currentUser = credentials.username;
-  }
-
-  mouseMoved(event: MouseEvent) {
+  pointerMoved(event: PointerEvent) {
     if(this.client.connected) {
       const payload = {posX: event.pageX, posY: event.pageY};
       this.client?.publish({destination: "/app/cursor", body: JSON.stringify(payload)});
@@ -115,7 +132,6 @@ export class AppComponent implements OnDestroy {
   }
 
   private updateInventory(inventories: Inventory[]) {
-    console.log("inventory update", inventories)
     if (!this.inventories) {
       this.inventories = inventories;
       return;
@@ -199,4 +215,33 @@ export class AppComponent implements OnDestroy {
       destination: "/app/itemtransfer", body: JSON.stringify(event)
     });
   }
+
+  private updateDraggedItems(itemDrag: ItemDragInfo) {
+    if (itemDrag.draggingPlayer != this.currentUser) {
+      console.log("Dragging received" + itemDrag.id)
+      const index = this.draggedItems.findIndex(item => item.id === itemDrag.id)
+      if (index >= 0) {
+        if (itemDrag.finished) {
+          this.draggedItems.splice(index, 1);
+        } else {
+          this.draggedItems[index] = itemDrag;
+          this.updateCursorOfDraggingUserIfNeeded(itemDrag);
+        }
+      } else {
+        if (!itemDrag.finished) {
+          this.draggedItems.push(itemDrag);
+          this.updateCursorOfDraggingUserIfNeeded(itemDrag);
+        }
+      }
+    }
+  }
+
+  private updateCursorOfDraggingUserIfNeeded(itemDragInfo : ItemDragInfo) {
+    let cursor = this.cursors.find(cursor => cursor.name === itemDragInfo.draggingPlayer);
+    if(cursor != undefined){
+      cursor.posY = itemDragInfo.posY;
+      cursor.posX = itemDragInfo.posX;
+    }
+  }
+
 }
