@@ -5,6 +5,6 @@ public record ItemDragDTO (
     Long id,
     int posX,
     int posY,
-
-    boolean finished){
-}
+    boolean finished,
+    String draggingPlayer
+){ }

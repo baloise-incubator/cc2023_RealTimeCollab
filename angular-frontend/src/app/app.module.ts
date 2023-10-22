@@ -13,9 +13,10 @@ import { GameComponent } from './components/game/game.component';
 import { balIconAccount, balIconSend, balIconStarShape, balIconStarFull, balIconWeb, balIconX} from '@baloise/design-system-icons'
 import { ItemBaseSelectionComponent } from './components/item-base-selection/item-base-selection.component'
 import {HttpClientModule} from "@angular/common/http";
+import {DraggedItemComponent} from "./components/dragged-item/dragged-item.component";
 
 @NgModule({
-  declarations: [AppComponent, CheckInComponent, InventoryComponent, InventoryItemComponent, ChatComponent, GameComponent, StockComponent, UserBarComponent, ItemBaseSelectionComponent],
+  declarations: [AppComponent, CheckInComponent, InventoryComponent, InventoryItemComponent, ChatComponent, GameComponent, StockComponent, UserBarComponent, ItemBaseSelectionComponent, DraggedItemComponent],
     imports: [
         BrowserModule,
         HttpClientModule,

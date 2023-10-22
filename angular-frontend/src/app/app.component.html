@@ -1,14 +1,14 @@
-<bal-app class="has-sticky-footer" style="position: relative;" (mousemove)="mouseMoved($event)">
+<bal-app class="has-sticky-footer" style="position: relative;" (pointermove)="pointerMoved($event)">
+    <div>
+        <app-dragged-item *ngFor="let draggedItem of draggedItems" style="z-index: 1200; position: absolute;"
+                          [itemDragInfo]="draggedItem" [ngStyle]="{'top': draggedItem.posY + 'px', 'left': draggedItem.posX + 'px'}"></app-dragged-item>
+    </div>
     <div>
         <bal-text class="has-text-shadow" *ngFor="let cursor of cursors" style="z-index: 1100; position: absolute;"
                    [ngStyle]="{'top': cursor.posY + 'px', 'left': cursor.posX + 25 + 'px'}"
                    [color]="cursor.color">{{cursor.name}}</bal-text>
         <bal-icon *ngFor="let cursor of cursors" name="edit" style="z-index: 1000; position: absolute;"
                   [ngStyle]="{'top': cursor.posY + 'px', 'left': cursor.posX + 'px'}" [color]="cursor.color"></bal-icon>
-
-        <bal-icon *ngFor="let draggedItem of draggedItems" name="edit" style="z-index: 1200; position: absolute;"
-                  [ngStyle]="{'top': draggedItem.posY + 'px', 'left': draggedItem.posX + 'px'}"></bal-icon>
-
     </div>
     <header>
         <!-- Header content -->

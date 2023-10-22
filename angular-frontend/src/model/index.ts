@@ -88,4 +88,5 @@ export interface ItemDragInfo {
     posX: number;
     posY: number;
     finished : boolean;
+    draggingPlayer : string;
 }

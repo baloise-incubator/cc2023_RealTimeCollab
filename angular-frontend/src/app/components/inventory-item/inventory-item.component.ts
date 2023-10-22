@@ -46,6 +46,7 @@ export class InventoryItemComponent implements OnInit {
         posX: event.pageX,
         posY : event.pageY,
         id:this.item.id,
+        draggingPlayer: this.item.userLock,
         finished: finished
       }
       this.client?.publish({destination: "/app/item-dragging", body: JSON.stringify(itemDragInfo)

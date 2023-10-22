@@ -43,7 +43,7 @@ public class PickUpHandler {
 
     public void spawnPickupsAndSendToClients() {
         var currentTime = System.currentTimeMillis();
-        if (currentTime - lastSpawn > 3000) {
+        if (currentTime - lastSpawn > 3000 && pickups.size() < 20) {
             lastSpawn = currentTime;
             pickups.add(
                     new Pickup(

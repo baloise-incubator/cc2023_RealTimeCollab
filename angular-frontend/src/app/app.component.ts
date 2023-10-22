@@ -100,7 +100,7 @@ export class AppComponent implements OnDestroy {
     }
   }
 
-  mouseMoved(event: MouseEvent) {
+  pointerMoved(event: PointerEvent) {
     if(this.client.connected) {
       const payload = {posX: event.pageX, posY: event.pageY};
       this.client?.publish({destination: "/app/cursor", body: JSON.stringify(payload)});
@@ -217,18 +217,30 @@ export class AppComponent implements OnDestroy {
   }
 
   private updateDraggedItems(itemDrag: ItemDragInfo) {
-    console.log("Dragging received" + itemDrag.id)
-    const index = this.draggedItems.findIndex(item => item.id === itemDrag.id)
-    if(index >= 0){
-      if(itemDrag.finished){
-        this.draggedItems.splice(index, 1);
+    if (itemDrag.draggingPlayer != this.currentUser) {
+      console.log("Dragging received" + itemDrag.id)
+      const index = this.draggedItems.findIndex(item => item.id === itemDrag.id)
+      if (index >= 0) {
+        if (itemDrag.finished) {
+          this.draggedItems.splice(index, 1);
+        } else {
+          this.draggedItems[index] = itemDrag;
+          this.updateCursorOfDraggingUserIfNeeded(itemDrag);
+        }
       } else {
-        this.draggedItems[index] = itemDrag;
+        if (!itemDrag.finished) {
+          this.draggedItems.push(itemDrag);
+          this.updateCursorOfDraggingUserIfNeeded(itemDrag);
+        }
       }
-    } else {
-      if(!itemDrag.finished){
-        this.draggedItems.push(itemDrag);
-      }
+    }
+  }
+
+  private updateCursorOfDraggingUserIfNeeded(itemDragInfo : ItemDragInfo) {
+    let cursor = this.cursors.find(cursor => cursor.name === itemDragInfo.draggingPlayer);
+    if(cursor != undefined){
+      cursor.posY = itemDragInfo.posY;
+      cursor.posX = itemDragInfo.posX;
     }
   }
 
