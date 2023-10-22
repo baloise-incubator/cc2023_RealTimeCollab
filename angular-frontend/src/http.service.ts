@@ -8,10 +8,12 @@ import {Injectable} from "@angular/core";
 export class HttpService {
   host: String;
   protocol: String;
+  protocolHttp : String;
 
   constructor(private http: HttpClient) {
     this.host = environment.backend.host;
     this.protocol = environment.backend.protocol;
+    this.protocolHttp = environment.backend.protocolHttp;
   }
 
   getWebSocket(credentials: Credentials): WebSocket {
@@ -20,7 +22,7 @@ export class HttpService {
   }
 
   getRegistrationURL(credentials : Credentials) : Observable<boolean> {
-    return this.http.post<boolean>(`http://${this.host}/api/user/registration`, credentials)
+    return this.http.post<boolean>(`${this.protocolHttp}://${this.host}/api/user/registration`, credentials)
   }
 
 }
