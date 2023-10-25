@@ -9,3 +9,7 @@ https://www.adesso.de/de/news/blog/websockets-leichtgemacht-mit-stomp-js-und-spr
 
 The latest version of the app can be tested here:
 https://realtimecollab-test.apps.baloise.dev/
+
+## Thank you! ##
+Thank you guys for the awesome time together and all the nice memories! Looking forward to seeing you guys again next time!
+![alt text](scooter2.png)
